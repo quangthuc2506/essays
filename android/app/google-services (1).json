@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "916863203114",
+    "project_id": "essays-41fee",
+    "storage_bucket": "essays-41fee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916863203114:android:310d377df32a89f4f79053",
+        "android_client_info": {
+          "package_name": "com.example.essays"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916863203114-b5hvv4jrlmnavhusuc460if2rl6dba1u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.essays",
+            "certificate_hash": "e5e7b998edc283208833283ff41cd4ce866c07ae"
+          }
+        },
+        {
+          "client_id": "916863203114-e5jfbe9nm0363pe0bd4reg7ctc7i429e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg6wf43Rp9OT_LGsf_N1MU8__7PGoPRZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916863203114-e5jfbe9nm0363pe0bd4reg7ctc7i429e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
