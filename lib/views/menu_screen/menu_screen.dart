@@ -336,7 +336,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailProductScreen()));
+                                  builder: (context) => DetailProductScreen(product: state.products[index],)));
                         },
                         child: Column(
                           children: [

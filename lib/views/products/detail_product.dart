@@ -1,9 +1,12 @@
+import 'package:essays/models/product.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
+import 'package:essays/views/products/details_tab.dart';
 import 'package:flutter/material.dart';
 
 class DetailProductScreen extends StatefulWidget {
-  DetailProductScreen({Key? key}) : super(key: key);
+  Product product;
+  DetailProductScreen({Key? key, required this.product}) : super(key: key);
   int initialIndex = 0;
 
   @override
@@ -22,10 +25,10 @@ class _DetailProductScreenState extends State<DetailProductScreen>
           physics: const ScrollPhysics(),
           slivers: [
             SliverPersistentHeader(
-              delegate: CustomSliverAppBarDelegate(expandedHeight: 200),
+              delegate: CustomSliverAppBarDelegate(expandedHeight: 200, product: widget.product),
               pinned: true,
             ),
-            buildBody(_tabController),
+            buildBody(_tabController, widget.product),
           ],
         ),
         bottomSheet: _tabController.index != 0
@@ -77,7 +80,7 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text('Thêm'),
                             Padding(
                               padding: EdgeInsets.all(8.0),
@@ -86,7 +89,7 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                                 size: 5,
                               ),
                             ),
-                            Text('100.000đ')
+                            Text(widget.product.price)
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
@@ -104,16 +107,16 @@ class _DetailProductScreenState extends State<DetailProductScreen>
     );
   }
 
-  Widget buildBody(TabController tabCtrl) => SliverToBoxAdapter(
+  Widget buildBody(TabController tabCtrl, Product product) =>
+      SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.only(top: 50),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height - 20,
             child: Column(
               children: [
                 TabBar(
                   controller: tabCtrl,
-                  
                   onTap: (index) {
                     widget.initialIndex = index;
                     setState(() {});
@@ -137,11 +140,7 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                   height: 500,
                   child: TabBarView(
                     controller: tabCtrl,
-                    children: [
-                      const Text('Hi'),
-                      const Text('there'),
-                      detailsTab()
-                    ],
+                    children: [DetailsTab(product: product,), const Text('there'), detailsTab()],
                   ),
                 )
               ],
@@ -161,7 +160,8 @@ class _DetailProductScreenState extends State<DetailProductScreen>
 
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  CustomSliverAppBarDelegate({required this.expandedHeight});
+  Product product;
+  CustomSliverAppBarDelegate({required this.expandedHeight, required this.product});
 
   @override
   Widget build(
@@ -178,7 +178,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
           top: top - 40,
           left: 20,
           right: 20,
-          child: buildFloating(shrinkOffset),
+          child: buildFloating(shrinkOffset, product),
         ),
       ],
     );
@@ -186,7 +186,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   double apper(double shrinkOffset) => shrinkOffset / expandedHeight;
   double disapper(double shrinkOffset) => 1 - shrinkOffset / expandedHeight;
-  Widget buildFloating(double shrinkOffset) {
+  Widget buildFloating(double shrinkOffset, Product product) {
     return Opacity(
       opacity: disapper(shrinkOffset),
       child: Card(
@@ -196,16 +196,16 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                const Text(
-                  'Salted Pasta with Mushroom',
+                Text(
+                  product.productName,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text('Món chính '),
+                    children: [
+                      Text('${product.categoryname!} '),
                       Icon(
                         Icons.fiber_manual_record,
                         size: 10,
@@ -231,7 +231,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                           color: Colors.yellow[700],
                         ),
                         label: const Text('4.9')),
-                    const Text('100.000đ')
+                     Text(product.price)
                   ],
                 )
               ],
@@ -249,13 +249,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         ));
   }
 
-  Widget buildAppBar(double shrinkOffset) => Opacity(
-        opacity: apper(shrinkOffset),
-        child: AppBar(
-          title: const Text('Quang Thuc'),
-          centerTitle: true,
-        ),
-      );
+  Widget buildAppBar(double shrinkOffset) =>
+      Opacity(opacity: apper(shrinkOffset), child: Container());
   @override
   double get maxExtent => expandedHeight;
 
