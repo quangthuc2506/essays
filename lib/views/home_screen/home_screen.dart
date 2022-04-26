@@ -70,6 +70,7 @@ class HomeScreen extends StatelessWidget {
                   },
                   child: Container(
                     color: Colors.grey[200],
+                    width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
                     child: Container(
                       height: width * 0.53,
@@ -105,8 +106,9 @@ class HomeScreen extends StatelessWidget {
                                             // child: Image.network(_user.photoURL!),
                                             color: Colors.grey[200],
                                             child: state is AuthenticatedState
-                                                ? state.userMap['avatar'] !=
-                                                        null
+                                                ? state.userMap['avatar']
+                                                        .toString()
+                                                        .isNotEmpty
                                                     ? Image.network(
                                                         state.userMap['avatar'])
                                                     : const Icon(
@@ -129,11 +131,16 @@ class HomeScreen extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               state is AuthenticatedState
-                                                  ? Text(
-                                                      '${state.userMap['name']}',
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18),
+                                                  ? SizedBox(
+                                                      width: 150,
+                                                      child: Text(
+                                                        '${state.userMap['name']}',
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     )
                                                   : const Text(
                                                       'Thêm nick name'),
@@ -291,10 +298,10 @@ class HomeScreen extends StatelessWidget {
                                   TextButton.icon(
                                       onPressed: () {
                                         Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CouponScreen()));
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CouponScreen()));
                                       },
                                       icon: const Icon(
                                         Icons.castle_rounded,

@@ -1,7 +1,9 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
+import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/blocs/category/category_bloc.dart';
 import 'package:essays/blocs/product/product_bloc.dart';
 import 'package:essays/repository/auth/auth_repository.dart';
+import 'package:essays/repository/cart/cart_repository.dart';
 import 'package:essays/repository/category/category_repository.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/views/intro_login_signup_screen/login2.dart';
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => AuthBloc(authRepository: AuthRepository())),
               BlocProvider(create: (context)=>CategoryBloc(categoryRepository: CategoryRepository())..add(LoadCategoriesEvent())),
-              BlocProvider(create: (context)=>ProductBloc(productRepository: ProductRepository()))
+              BlocProvider(create: (context)=>ProductBloc(productRepository: ProductRepository())),
+              BlocProvider(create: (context)=>CartBloc(cartRepository: CartRepository())),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

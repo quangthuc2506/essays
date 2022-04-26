@@ -1,4 +1,5 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
+import 'package:essays/views/personal/change_infor.dart';
 import 'package:essays/widgets/text_form_field_infor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ class AccountInformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AuthBloc>().add(LoadInforEvent());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -61,20 +63,36 @@ class AccountInformationScreen extends StatelessWidget {
                               child: ClipOval(
                                 child: BlocBuilder<AuthBloc, AuthState>(
                                   builder: (context, state) {
-                                    return Container(
-                                      width: 160,
-                                      height: 160,
-                                      color: Colors.grey[300],
-                                      child: state is AuthenticatedState
-                                          ? Image.network(
-                                              state.userMap['avatar'],
-                                              fit: BoxFit.cover,
-                                            )
-                                          : const Icon(
-                                              Icons.person_outline_outlined,
-                                              size: 100,
-                                              color: Color(0xff44CECA),
-                                            ),
+                                    return InkWell(
+                                      onTap: () {
+                                        context
+                                            .read<AuthBloc>()
+                                            .add(UpdateAvatarEvent());
+                                      },
+                                      child: Container(
+                                        width: 160,
+                                        height: 160,
+                                        color: Colors.grey[300],
+                                        child: state is AuthenticatedState
+                                            ? state.userMap['avatar']
+                                                    .toString()
+                                                    .isNotEmpty
+                                                ? Image.network(
+                                                    state.userMap['avatar'],
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : const Icon(
+                                                    Icons
+                                                        .person_outline_outlined,
+                                                    size: 100,
+                                                    color: Color(0xff44CECA),
+                                                  )
+                                            : const Icon(
+                                                Icons.person_outline_outlined,
+                                                size: 100,
+                                                color: Color(0xff44CECA),
+                                              ),
+                                      ),
                                     );
                                   },
                                 ),
@@ -126,23 +144,49 @@ class AccountInformationScreen extends StatelessWidget {
               : {};
           return Column(
             children: [
-              TextFormFieldInfor(
-                  controller: _fullNameController,
-                  labelText: 'Họ tên',
-                  prefixIcon: Icons.person_outline_outlined,
-                  onChanged: (value) {
-                  }),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeInfor(
+                                title: 'Họ tên',
+                                content: _fullNameController.text,
+                              )));
+                },
+                child: IgnorePointer(
+                  child: TextFormFieldInfor(
+                      controller: _fullNameController,
+                      labelText: 'Họ tên',
+                      prefixIcon: Icons.person_outline_outlined,
+                      suffixIcon: Icons.keyboard_arrow_right_rounded,
+                      readOnly: true),
+                ),
+              ),
               TextFormFieldInfor(
                   controller: _emailController,
                   prefixIcon: Icons.email_outlined,
                   labelText: 'Email',
                   readOnly: true),
-              TextFormFieldInfor(
-                  controller: _phoneNumberController,
-                  prefixIcon: Icons.phone,
-                  labelText: 'Số điện thoại',
-                  onChanged: (value) {
-                  }),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeInfor(
+                                title: 'Số điện thoại',
+                                content: _phoneNumberController.text,
+                              )));
+                },
+                child: IgnorePointer(
+                  child: TextFormFieldInfor(
+                      controller: _phoneNumberController,
+                      prefixIcon: Icons.phone,
+                      labelText: 'Số điện thoại',
+                      suffixIcon: Icons.keyboard_arrow_right_rounded,
+                      readOnly: true),
+                ),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -156,23 +200,10 @@ class AccountInformationScreen extends StatelessWidget {
                 ),
                 title: const Text('Đổi mật khẩu'),
                 minLeadingWidth: 36,
-                trailing: const Icon(Icons.keyboard_arrow_right_rounded),
               ),
               Expanded(
                   child: Container(
                 color: Colors.grey[200],
-                child: Center(
-                    child: ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(LoadInforEvent());
-                  },
-                  child: const Text('Cập nhật'),
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(175, 50),
-                      primary: const Color(0xff44CECA),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                )),
               ))
             ],
           );

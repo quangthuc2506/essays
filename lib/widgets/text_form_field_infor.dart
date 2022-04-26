@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget TextFormFieldInfor(
     {required IconData prefixIcon,
+    IconData? suffixIcon,
     String? labelText,
     bool? readOnly,
     String? hintText,
@@ -15,6 +16,7 @@ Widget TextFormFieldInfor(
       readOnly: readOnly,
       controller: controller,
       decoration: InputDecoration(
+        suffixIcon: Icon(suffixIcon,color: Colors.grey,),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         floatingLabelStyle: const TextStyle(color: Color(0xff44CECA)),
         focusedBorder: const UnderlineInputBorder(

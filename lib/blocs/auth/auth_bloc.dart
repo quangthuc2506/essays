@@ -65,12 +65,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoadInforEvent>((event, emit) async {
       emit(LoadingState());
       try {
-        authRepository.updateInfor(
-            name: event.fullName, phoneNumber: event.phoneNumber);
         final _user = FirebaseAuth.instance.currentUser!;
         Map<String, dynamic> userMap =
             await authRepository.getUser(_user.email!);
         emit(AuthenticatedState(userMap: userMap));
+      } catch (e) {
+        emit(AuthError(e.toString()));
+        emit(UnAuthenticatedState());
+      }
+    });
+    on<UpdateNameEvent>((event, emit) async {
+      try {
+        await authRepository.updateName(name: event.fullName);
+      } catch (e) {
+        emit(AuthError(e.toString()));
+        emit(UnAuthenticatedState());
+      }
+    });
+
+    on<UpdatePhoneNumberEvent>((event, emit) async {
+      try {
+        await authRepository.updatePhoneNumber(phoneNumber: event.phoneNumber);
+      } catch (e) {
+        emit(AuthError(e.toString()));
+        emit(UnAuthenticatedState());
+      }
+    });
+    on<UpdateAvatarEvent>((event, emit) async {
+      try {
+        await authRepository.getImage();
+        add(LoadInforEvent());
       } catch (e) {
         emit(AuthError(e.toString()));
         emit(UnAuthenticatedState());

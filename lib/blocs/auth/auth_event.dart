@@ -33,8 +33,15 @@ class LoadInforEvent extends AuthEvent {
   String? phoneNumber;
   LoadInforEvent({this.fullName, this.phoneNumber});
 }
-class UpdatedInforEvent extends AuthEvent {
+
+class UpdateNameEvent extends AuthEvent {
   String? fullName;
-  String? phoneNumber;
-  UpdatedInforEvent({this.fullName, this.phoneNumber});
+  UpdateNameEvent({this.fullName});
 }
+
+class UpdatePhoneNumberEvent extends AuthEvent {
+  String? phoneNumber;
+  UpdatePhoneNumberEvent({this.phoneNumber});
+}
+
+class UpdateAvatarEvent extends AuthEvent {}

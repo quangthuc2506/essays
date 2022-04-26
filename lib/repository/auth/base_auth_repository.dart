@@ -9,5 +9,6 @@ abstract class BaseAuthRepository {
   Future<void> signInWithGoogle();
   Future<Map<String, dynamic>> getUser(String email);
   // Stream<Map<String, dynamic>> getUser(String email);
-  Future<void> updateInfor();
+  Future<void> updateName();
+  Future<void> updatePhoneNumber();
 }

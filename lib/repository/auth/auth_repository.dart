@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/repository/auth/base_auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthRepository extends BaseAuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -94,14 +99,6 @@ class AuthRepository extends BaseAuthRepository {
     return userMap;
   }
 
-  @override
-  Future<void> updateInfor({String? name, String? phoneNumber}) async {
-    final _user = FirebaseAuth.instance.currentUser;
-    await _firestore
-        .collection('user')
-        .doc(_user!.uid)
-        .update({'name': name, 'phoneNumber': phoneNumber});
-  }
   // @override
   // Future<Map<String, dynamic>> getUser(String email) async {
   //   Map<String, dynamic> userMap = {};
@@ -117,4 +114,43 @@ class AuthRepository extends BaseAuthRepository {
   //   });
   //   return userMap;
   // }
+
+  @override
+  Future<void> updateName({String? name}) async {
+    final _user = FirebaseAuth.instance.currentUser;
+    await _firestore.collection('user').doc(_user!.uid).update({'name': name});
+  }
+
+  @override
+  Future<void> updatePhoneNumber({String? phoneNumber}) async {
+    final _user = FirebaseAuth.instance.currentUser;
+    await _firestore
+        .collection('user')
+        .doc(_user!.uid)
+        .update({'phoneNumber': phoneNumber});
+  }
+
+  File? imageFile;
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) async {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        await uploadImage();
+      }
+    });
+  }
+
+  Future uploadImage() async {
+    String fileName = const Uuid().v1();
+    var ref =
+        FirebaseStorage.instance.ref().child('images').child('$fileName.jpg');
+    var uploadTask = await ref.putFile(imageFile!);
+
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+    await _firestore
+        .collection('user')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({'avatar': imageUrl});
+  }
 }
