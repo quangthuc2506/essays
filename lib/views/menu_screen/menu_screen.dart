@@ -373,7 +373,7 @@ class MenuScreen extends StatelessWidget {
                                         ],
                                       ),
                                       Text(
-                                        state.products[index].price,
+                                        state.moneyFormat(state.products[index].price)!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w700),
                                       ),
@@ -396,18 +396,18 @@ class MenuScreen extends StatelessWidget {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          Container(
-                                            child: const Text("Mua 2 tặng 1",
-                                                style: TextStyle(
-                                                    color: Color(0xff957461),
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                                color: const Color(0xffF9F2E9),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                          )
+                                          // Container(
+                                          //   child: const Text("Mua 2 tặng 1",
+                                          //       style: TextStyle(
+                                          //           color: Color(0xff957461),
+                                          //           fontWeight:
+                                          //               FontWeight.w600)),
+                                          //   padding: const EdgeInsets.all(5),
+                                          //   decoration: BoxDecoration(
+                                          //       color: const Color(0xffF9F2E9),
+                                          //       borderRadius:
+                                          //           BorderRadius.circular(15)),
+                                          // )
                                         ],
                                       )
                                     ],

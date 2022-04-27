@@ -16,8 +16,9 @@ class ProductSearchedScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        
         context.read<ProductBloc>().add(LoadProductEvent());
+        Navigator.pop(context);
         return false;
       },
       child: Scaffold(

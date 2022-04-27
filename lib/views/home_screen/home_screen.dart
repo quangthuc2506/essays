@@ -1,13 +1,13 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
-import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/blocs/product/product_bloc.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
 import 'package:essays/views/favorite/favorite_screen.dart';
-import 'package:essays/views/main_page_screen.dart';
+import 'package:essays/views/menu_screen/menu_screen.dart';
 import 'package:essays/views/personal/member_infor_screen.dart';
 import 'package:essays/views/products/detail_product.dart';
+import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -232,9 +232,7 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MainPageScreen(
-                                        currentIndex: 2,
-                                      )));
+                                  builder: (context) => const ReserveScreen()));
                         },
                         child: Row(
                           children: [
@@ -387,9 +385,7 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailProductScreen(
-                                        product: state.products[index],
-                                      )));
+                                  builder: (context) => DetailProductScreen(product: state.products[index],)));
                         },
                         child: Card(
                           child: Stack(
@@ -423,7 +419,7 @@ class HomeScreen extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              '${state.products[index].price}đ'),
+                                              '${state.moneyFormat(state.products[index].price)}đ'),
                                           SizedBox(
                                             height: 30,
                                             child: TextButton.icon(
@@ -457,12 +453,7 @@ class HomeScreen extends StatelessWidget {
                                           0.5,
                                       height: 35,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          context.read<CartBloc>().add(
-                                              AddToCartEvent(
-                                                  product:
-                                                      state.products[index]));
-                                        },
+                                        onPressed: () {},
                                         child: const Text(
                                           'Thêm vào đơn',
                                           style: TextStyle(
@@ -503,7 +494,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPageScreen(currentIndex: 1,)));
+                              builder: (context) => MenuScreen()));
                     },
                     child: const Text(
                       'Menu',
