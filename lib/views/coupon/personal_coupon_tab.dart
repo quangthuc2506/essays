@@ -1,5 +1,5 @@
 import 'package:essays/values/app_assets.dart';
-import 'package:essays/views/menu_screen/menu_screen.dart';
+import 'package:essays/views/main_page_screen.dart';
 import 'package:flutter/material.dart';
 
 class PersonalCouponTab extends StatelessWidget {
@@ -79,7 +79,7 @@ class PersonalCouponTab extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MenuScreen()));
+                              builder: (context) => MainPageScreen(currentIndex: 1,)));
                     },
                     child: Container(
                       alignment: Alignment.center,

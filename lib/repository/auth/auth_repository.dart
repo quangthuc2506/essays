@@ -65,7 +65,8 @@ class AuthRepository extends BaseAuthRepository {
         'avatar': _user.photoURL,
         'phoneNumber': '',
         'password': '',
-        'point': '0'
+        'point': '0',
+        'address':''
       });
     } catch (e) {
       throw Exception(e.toString());
@@ -128,6 +129,14 @@ class AuthRepository extends BaseAuthRepository {
         .collection('user')
         .doc(_user!.uid)
         .update({'phoneNumber': phoneNumber});
+  }
+@override
+  Future<void> updateAddress({String? address}) async {
+    final _user = FirebaseAuth.instance.currentUser;
+    await _firestore
+        .collection('user')
+        .doc(_user!.uid)
+        .update({'address': address});
   }
 
   File? imageFile;

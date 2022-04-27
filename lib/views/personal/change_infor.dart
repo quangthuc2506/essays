@@ -68,11 +68,20 @@ class ChangeInfor extends StatelessWidget {
                     .read<AuthBloc>()
                     .add(UpdateNameEvent(fullName: _textController.text));
                 Navigator.pop(context);
+                context.read<AuthBloc>().add(LoadInforEvent());
               }
               if (title == 'Số điện thoại') {
                 context.read<AuthBloc>().add(
                     UpdatePhoneNumberEvent(phoneNumber: _textController.text));
-                     Navigator.pop(context);
+                Navigator.pop(context);
+                context.read<AuthBloc>().add(LoadInforEvent());
+              }
+              if (title == 'Địa chỉ') {
+                context
+                    .read<AuthBloc>()
+                    .add(UpdateAddressEvent(address: _textController.text));
+                Navigator.pop(context);
+                context.read<AuthBloc>().add(LoadInforEvent());
               }
             },
             child: const Text('Lưu thay đổi'),

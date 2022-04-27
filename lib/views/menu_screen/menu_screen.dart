@@ -4,19 +4,14 @@ import 'package:essays/blocs/product/product_bloc.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
+import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/views/products/detail_product.dart';
-import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:essays/views/search/product_searched_screen.dart';
 import 'package:essays/views/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MenuScreen extends StatefulWidget {
-  @override
-  State<MenuScreen> createState() => _MenuScreenState();
-}
-
-class _MenuScreenState extends State<MenuScreen> {
+class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -129,13 +124,12 @@ class _MenuScreenState extends State<MenuScreen> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width * 0.5,
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
                   'https://intmt.vn/wp-content/uploads/2018/04/BANNER-MARKTING3-03_2.jpg',
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),
@@ -147,7 +141,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ReserveScreen()));
+                          builder: (context) => MainPageScreen(currentIndex: 2,)));
                 },
                 icon: SizedBox(
                     width: 24,
@@ -195,8 +189,6 @@ class _MenuScreenState extends State<MenuScreen> {
                 child: BlocBuilder<CategoryBloc, CategoryState>(
                   builder: (context, state) {
                     if (state is LoadedCategoryState) {
-                      print("thuc: LoadedCategoryState");
-                      print('state: ${state.categories.length}');
                       return GridView.builder(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),

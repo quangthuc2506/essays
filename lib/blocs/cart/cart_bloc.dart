@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:essays/models/cart.dart';
+import 'package:essays/models/product.dart';
 import 'package:essays/repository/cart/cart_repository.dart';
 
 part 'cart_event.dart';
@@ -18,6 +19,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
     on<UpdatedCartsEvent>((event, emit) async {
       emit(LoadedCartState(carts: event.carts));
+    });
+    on<AddToCartEvent>((event, emit) {
+      try {
+        cartRepository.addToCart(event.product);
+      } catch (e) {}
+    });
+    on<DeleteFromTheCartEvent>((event, emit) async {
+      try {
+        await cartRepository.deleteFromTheCart(event.cart);
+      } catch (e) {}
+    });
+    on<DeleteAllFromTheCartEvent>((event, emit) async {
+      try {
+        await cartRepository.deleteAllFromTheCart();
+      } catch (e) {}
     });
   }
 }

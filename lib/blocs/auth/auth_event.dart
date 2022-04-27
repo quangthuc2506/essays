@@ -43,5 +43,9 @@ class UpdatePhoneNumberEvent extends AuthEvent {
   String? phoneNumber;
   UpdatePhoneNumberEvent({this.phoneNumber});
 }
+class UpdateAddressEvent extends AuthEvent {
+  String? address;
+  UpdateAddressEvent({this.address});
+}
 
 class UpdateAvatarEvent extends AuthEvent {}

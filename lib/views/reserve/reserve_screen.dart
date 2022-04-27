@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/values/app_assets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -245,7 +247,18 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     height: 20,
                   ),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Map<String, dynamic> map = {
+                        'email': FirebaseAuth.instance.currentUser!.email,
+                        'time': dateTime,
+                        'amount': amount,
+                        'note': noteController.text,
+                        'paid' : false
+                      };
+                      await FirebaseFirestore.instance
+                          .collection('reserve')
+                          .add(map);
+                    },
                     icon: const Icon(Icons.verified),
                     label: const Text('Xác nhận'),
                     style: ElevatedButton.styleFrom(

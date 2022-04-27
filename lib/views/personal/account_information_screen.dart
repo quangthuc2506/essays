@@ -9,10 +9,10 @@ class AccountInformationScreen extends StatelessWidget {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    context.read<AuthBloc>().add(LoadInforEvent());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -139,7 +139,8 @@ class AccountInformationScreen extends StatelessWidget {
                   name = state.userMap['name'],
                   _fullNameController.text = name,
                   _emailController.text = state.userMap['email'],
-                  _phoneNumberController.text = state.userMap['phoneNumber']
+                  _phoneNumberController.text = state.userMap['phoneNumber'],
+                  _addressController.text = state.userMap['address']
                 }
               : {};
           return Column(
@@ -168,6 +169,25 @@ class AccountInformationScreen extends StatelessWidget {
                   prefixIcon: Icons.email_outlined,
                   labelText: 'Email',
                   readOnly: true),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeInfor(
+                                title: 'Địa chỉ',
+                                content: _addressController.text,
+                              )));
+                },
+                child: IgnorePointer(
+                  child: TextFormFieldInfor(
+                      controller: _addressController,
+                      prefixIcon: Icons.location_on_rounded,
+                      labelText: 'Địa chỉ',
+                      suffixIcon: Icons.keyboard_arrow_right_rounded,
+                      readOnly: true),
+                ),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(

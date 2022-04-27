@@ -1,15 +1,29 @@
+import 'package:essays/blocs/auth/auth_bloc.dart';
 import 'package:essays/blocs/cart/cart_bloc.dart';
-import 'package:essays/views/menu_screen/menu_screen.dart';
+import 'package:essays/views/coupon/coupon_screen.dart';
+import 'package:essays/views/main_page_screen.dart';
+import 'package:essays/views/personal/change_infor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  bool check1 = false;
+  bool check2 = true;
+  int ship = 0;
+  String note = '';
+  @override
   Widget build(BuildContext context) {
     context.read<CartBloc>().add(LoadCartsEvent());
+    TextEditingController _noteController = TextEditingController();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -27,14 +41,19 @@ class CartScreen extends StatelessWidget {
               color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
-        actions: const [
+        actions: [
           Center(
-              child: Text(
-            'Xoá tất cả',
-            style: TextStyle(
-                color: Color(0xffBE965B), fontWeight: FontWeight.w600),
+              child: InkWell(
+            onTap: () {
+              context.read<CartBloc>().add(DeleteAllFromTheCartEvent());
+            },
+            child: const Text(
+              'Xoá tất cả',
+              style: TextStyle(
+                  color: Color(0xffBE965B), fontWeight: FontWeight.w600),
+            ),
           )),
-          SizedBox(
+          const SizedBox(
             width: 10,
           )
         ],
@@ -44,7 +63,7 @@ class CartScreen extends StatelessWidget {
           return SingleChildScrollView(
             physics: const ScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 70),
+              padding: const EdgeInsets.only(bottom: 170),
               child: Column(
                 children: [
                   Container(
@@ -63,28 +82,75 @@ class CartScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w700)),
                         Row(
                           children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('Đến lấy'),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(105, 33),
-                                  primary: const Color(0xffBE965B)),
-                            ),
+                            check1 == true
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        check1 = true;
+                                        check2 = false;
+                                        ship = 0;
+                                      });
+                                    },
+                                    child: const Text(
+                                      'Đến lấy',
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size(105, 33),
+                                        primary: const Color(0xffBE965B)),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        check1 = true;
+                                        check2 = false;
+                                        ship = 0;
+                                      });
+                                    },
+                                    child: Text(
+                                      'Đến lấy',
+                                      style: TextStyle(color: Colors.grey[500]),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size(105, 33),
+                                        primary: const Color(0xffEFEFEF)),
+                                  ),
                             const SizedBox(
                               width: 10,
                             ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Ship',
-                                style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(105, 33),
-                                  primary: const Color(0xffEFEFEF)),
-                            ),
+                            check2 == true
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        check1 = false;
+                                        check2 = true;
+                                        ship = 20000;
+                                      });
+                                    },
+                                    child: const Text(
+                                      'Ship',
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size(105, 33),
+                                        primary: const Color(0xffBE965B)),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        check1 = false;
+                                        check2 = true;
+                                        ship = 20000;
+                                      });
+                                    },
+                                    child: Text(
+                                      'Ship',
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size(105, 33),
+                                        primary: const Color(0xffEFEFEF)),
+                                  ),
                           ],
                         )
                       ],
@@ -93,67 +159,116 @@ class CartScreen extends StatelessWidget {
                   const Divider(
                     thickness: 2.5,
                   ),
-                  const SizedBox(
-                    height: 50,
-                    child: ListTile(
-                      leading: SizedBox(
-                        height: double.infinity,
-                        child: Icon(
-                          Icons.location_on_outlined,
-                          color: Color(0xffBE965B),
-                        ),
-                      ),
-                      visualDensity: VisualDensity(vertical: -4),
-                      title: Padding(
-                        padding: EdgeInsets.only(top: 4),
-                        child: Text(
-                          "Vinhome Green Bay",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      subtitle: Padding(
-                        padding: EdgeInsets.only(bottom: 3, top: 1),
-                        child: Text(
-                          'Vinhome Green Bay, Phường Mễ Trì',
-                          style: TextStyle(fontSize: 12, color: Colors.black),
-                        ),
-                      ),
-                      minLeadingWidth: 0,
-                      trailing: Icon(Icons.keyboard_arrow_down_outlined),
-                    ),
-                  ),
-                  const Divider(
-                    thickness: 2.5,
-                  ),
-                  SizedBox(
-                    height: 40,
-                    child: Transform.translate(
-                      offset: const Offset(0, -15),
-                      child: const ListTile(
-                        leading: Padding(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Icon(
-                            Icons.person_outline_outlined,
-                            color: Color(0xffBE965B),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChangeInfor(
+                                              title: 'Địa chỉ',
+                                              content:
+                                                  state is AuthenticatedState
+                                                      ? state.userMap['address']
+                                                      : '',
+                                            )));
+                              },
+                              leading: const SizedBox(
+                                height: double.infinity,
+                                child: Icon(
+                                  Icons.location_on_outlined,
+                                  color: Color(0xffBE965B),
+                                ),
+                              ),
+                              visualDensity: const VisualDensity(vertical: -4),
+                              title: const Padding(
+                                padding: EdgeInsets.only(top: 4),
+                                child: SizedBox(
+                                  width: 10,
+                                  child: Text(
+                                    "Địa chỉ nhận hàng",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                              subtitle: Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 3, top: 1),
+                                child: Text(
+                                  state is AuthenticatedState
+                                      ? state.userMap['address']
+                                      : '',
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.black),
+                                ),
+                              ),
+                              minLeadingWidth: 0,
+                              trailing: const Icon(
+                                  Icons.keyboard_arrow_down_outlined),
+                            ),
                           ),
-                        ),
-                        title: Text(
-                          "Nguyễn Quang Thức",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text('0963255409'),
-                        minLeadingWidth: 0,
-                        trailing: Text(
-                          'Sửa',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xffBE965B)),
-                        ),
-                      ),
-                    ),
+                          const Divider(
+                            thickness: 2.5,
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: Transform.translate(
+                              offset: const Offset(0, -15),
+                              child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChangeInfor(
+                                                title: 'Địa chỉ',
+                                                content: state
+                                                        is AuthenticatedState
+                                                    ? state
+                                                        .userMap['phoneNumber']
+                                                    : '',
+                                              )));
+                                },
+                                leading: const Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Icon(
+                                    Icons.person_outline_outlined,
+                                    color: Color(0xffBE965B),
+                                  ),
+                                ),
+                                title: Text(
+                                  state is AuthenticatedState
+                                      ? state.userMap['name']
+                                      : '',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                subtitle: Text(state is AuthenticatedState
+                                    ? state.userMap['phoneNumber']
+                                    : ''),
+                                minLeadingWidth: 0,
+                                trailing: const Text(
+                                  'Sửa',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xffBE965B)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const Divider(
                     thickness: 2.5,
@@ -197,17 +312,75 @@ class CartScreen extends StatelessWidget {
                     height: 40,
                     child: Transform.translate(
                       offset: const Offset(0, -8),
-                      child: const ListTile(
-                        leading: Icon(
+                      child: ListTile(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      title: const Text('Ghi chú'),
+                                      titlePadding: const EdgeInsets.only(
+                                          left: 10, top: 10, bottom: 0),
+                                      contentPadding: const EdgeInsets.all(5),
+                                      content: TextFormField(
+                                        maxLines: 5,
+                                        controller: _noteController,
+                                        decoration: InputDecoration(
+                                          hintText:
+                                              'Thêm ghi chú (ví dụ: ít đường...)',
+                                          contentPadding: const EdgeInsets.only(
+                                              left: 10, top: 15),
+                                          filled: true,
+                                          fillColor: Colors.grey[200],
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          note = _noteController.text;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Thêm ghi chú'),
+                                      style: TextButton.styleFrom(
+                                          primary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          backgroundColor:
+                                              const Color(0xffB3282D),
+                                          fixedSize: Size(
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5,
+                                              50)),
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        leading: const Icon(
                           Icons.assignment,
                           color: Color(0xffBE965B),
                         ),
                         minLeadingWidth: 0,
                         title: Text(
-                          'Ghi chú cho đơn hàng',
-                          style: TextStyle(fontSize: 14),
+                          note != '' ? note : 'Ghi chú cho đơn hàng',
+                          style: const TextStyle(fontSize: 14),
                         ),
-                        trailing: Text(
+                        trailing: const Text(
                           'Sửa',
                           style: TextStyle(
                               fontSize: 14,
@@ -232,12 +405,15 @@ class CartScreen extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         InkWell(
-                          splashColor: Colors.red,
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MenuScreen()));
+                                    builder: (context) => MainPageScreen(
+                                          currentIndex: 1,
+                                        )));
                           },
                           child: Row(
                             children: [
@@ -285,14 +461,40 @@ class CartScreen extends StatelessWidget {
                                   padding: const EdgeInsets.all(10),
                                   child: Row(
                                     children: [
-                                      Container(
-                                        width: 75,
-                                        height: 75,
-                                        child: Image(
-                                            image: NetworkImage(
-                                                state.carts[index].image!)),
-                                        margin:
-                                            const EdgeInsets.only(right: 10),
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            width: 75,
+                                            height: 75,
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    state.carts[index].image!)),
+                                            margin: const EdgeInsets.only(
+                                                right: 10),
+                                          ),
+                                          Positioned(
+                                              right: 10,
+                                              top: 1,
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 20,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: const Color(
+                                                            0xffBE965B)),
+                                                    color:
+                                                        const Color(0xffF8F1E7),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Text(
+                                                  state.carts[index].amount!,
+                                                  style: const TextStyle(
+                                                      color: Color(0xffBE965B)),
+                                                ),
+                                              )),
+                                        ],
                                       ),
                                       SizedBox(
                                         height: 75,
@@ -306,11 +508,36 @@ class CartScreen extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              state.carts[index].productName!,
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  state.carts[index]
+                                                      .productName!,
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    context.read<CartBloc>().add(
+                                                        DeleteFromTheCartEvent(
+                                                            cart: state
+                                                                .carts[index]));
+                                                  },
+                                                  child: const Text(
+                                                    'Xóa',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xffBE965B)),
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                             Expanded(
                                               child: Row(
@@ -321,7 +548,8 @@ class CartScreen extends StatelessWidget {
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    state.carts[index].note!.isEmpty
+                                                    state.carts[index].note!
+                                                            .isEmpty
                                                         ? 'Không có ghi chú'
                                                         : state
                                                             .carts[index].note!,
@@ -329,7 +557,8 @@ class CartScreen extends StatelessWidget {
                                                         color: Colors.grey),
                                                   ),
                                                   Text(
-                                                    state.carts[index].price!,
+                                                    state.moneyFormat(state
+                                                        .carts[index].price!)!,
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   )
@@ -363,23 +592,46 @@ class CartScreen extends StatelessWidget {
                     'Giá bán đã bao gồm 8% VAT, áp dụng từ ngày 01/02/2022 đến 31/12/2022',
                     style: TextStyle(color: Colors.grey),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'Tạm tính',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text('39.000đ', style: TextStyle(color: Colors.grey))
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Tạm tính',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                          state is LoadedCartState
+                              ? state.moneyFormat(state.getPriceTotal().toString()).toString()
+                              : '',
+                          style: const TextStyle(color: Colors.grey))
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text('Tổng cộng(1 món)'), Text('39.000đ')],
+                    children: const [
+                      Text('Phí ship', style: TextStyle(color: Colors.grey)),
+                      Text('20.000', style: TextStyle(color: Colors.grey))
+                    ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  state is LoadedCartState
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                'Tổng cộng(${state.getAmountTotal().toString()} món)'),
+                            Text('${state.moneyFormat(state.getPriceTotal().toString())}đ')
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text('Tổng cộng(0 món)'),
+                            Text('0đ')
+                          ],
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -423,7 +675,12 @@ class CartScreen extends StatelessWidget {
                       thickness: 2,
                     ),
                     TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CouponScreen()));
+                        },
                         icon: const Icon(
                           Icons.credit_card_outlined,
                           color: Color(0xffBE965B),
@@ -434,14 +691,22 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Đặt 1 món: 68.000đ'),
-              style: ElevatedButton.styleFrom(
-                  primary: const Color(0xffB3282D),
-                  fixedSize: Size(MediaQuery.of(context).size.width - 20, 50),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
+            BlocBuilder<CartBloc, CartState>(
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {},
+                  child: state is LoadedCartState
+                      ? Text(
+                          'Đặt ${state.getAmountTotal().toString()} món: ${state.moneyFormat((state.getPriceTotal() + ship).toString())}đ')
+                      : const Text('Chưa có hàng trong giỏ'),
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffB3282D),
+                      fixedSize:
+                          Size(MediaQuery.of(context).size.width - 20, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                );
+              },
             )
           ],
         ),

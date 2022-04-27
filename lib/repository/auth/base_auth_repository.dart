@@ -11,4 +11,5 @@ abstract class BaseAuthRepository {
   // Stream<Map<String, dynamic>> getUser(String email);
   Future<void> updateName();
   Future<void> updatePhoneNumber();
+  Future<void> updateAddress();
 }

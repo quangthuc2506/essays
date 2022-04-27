@@ -51,7 +51,7 @@ class MemberInforScreen extends StatelessWidget {
                           BoxShadow(
                               color: Colors.grey,
                               offset: Offset(0.0, 1.0),
-                              blurRadius: 6.0)
+                              blurRadius: 1)
                         ]),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

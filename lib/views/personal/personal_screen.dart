@@ -1,4 +1,6 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
+import 'package:essays/views/coupon/coupon_screen.dart';
+import 'package:essays/views/favorite/favorite_screen.dart';
 import 'package:essays/views/intro_login_signup_screen/login2.dart';
 import 'package:essays/views/personal/account_information_screen.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +40,9 @@ class PersonalScreen extends StatelessWidget {
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       return Text(
-                        state is AuthenticatedState ?
-                          state.userMap['name']
-                        : 'Good morning!' ,
+                        state is AuthenticatedState
+                            ? state.userMap['name']
+                            : 'Good morning!',
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -78,7 +80,10 @@ class PersonalScreen extends StatelessWidget {
           ListTile(
             title: const Text('Món ăn yêu thích'),
             trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const FavoriteScreen()));
+            },
           ),
           const Divider(
             height: 0,
@@ -94,16 +99,15 @@ class PersonalScreen extends StatelessWidget {
           ListTile(
             title: const Text('Ví Coupon'),
             trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const CouponScreen()));
+            },
           ),
           const Divider(
             height: 0,
           ),
-          ListTile(
-            title: const Text('Địa chỉ đã lưu'),
-            trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-            onTap: () {},
-          ),
+          
           const Divider(
             height: 0,
           ),

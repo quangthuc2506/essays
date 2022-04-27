@@ -21,7 +21,7 @@ class Login2Screen extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthenticatedState) {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => MainPageScreen()));
+                MaterialPageRoute(builder: (context) => MainPageScreen(currentIndex: 0,)));
           }
           if (state is AuthError) {
             // Showing the error message if the user has entered invalid credentials

@@ -1,13 +1,13 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
+import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/blocs/product/product_bloc.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
 import 'package:essays/views/favorite/favorite_screen.dart';
-import 'package:essays/views/menu_screen/menu_screen.dart';
+import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/views/personal/member_infor_screen.dart';
 import 'package:essays/views/products/detail_product.dart';
-import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -232,7 +232,9 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ReserveScreen()));
+                                  builder: (context) => MainPageScreen(
+                                        currentIndex: 2,
+                                      )));
                         },
                         child: Row(
                           children: [
@@ -385,7 +387,9 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailProductScreen()));
+                                  builder: (context) => DetailProductScreen(
+                                        product: state.products[index],
+                                      )));
                         },
                         child: Card(
                           child: Stack(
@@ -453,7 +457,12 @@ class HomeScreen extends StatelessWidget {
                                           0.5,
                                       height: 35,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                              AddToCartEvent(
+                                                  product:
+                                                      state.products[index]));
+                                        },
                                         child: const Text(
                                           'Thêm vào đơn',
                                           style: TextStyle(
@@ -494,7 +503,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MenuScreen()));
+                              builder: (context) => MainPageScreen(currentIndex: 1,)));
                     },
                     child: const Text(
                       'Menu',

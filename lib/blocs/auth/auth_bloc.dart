@@ -91,6 +91,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(UnAuthenticatedState());
       }
     });
+    on<UpdateAddressEvent>((event, emit) async {
+      try {
+        await authRepository.updateAddress(address: event.address);
+      } catch (e) {
+        emit(AuthError(e.toString()));
+        emit(UnAuthenticatedState());
+      }
+    });
     on<UpdateAvatarEvent>((event, emit) async {
       try {
         await authRepository.getImage();

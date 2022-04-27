@@ -5,12 +5,13 @@ import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainPageScreen extends StatefulWidget {
+  MainPageScreen({Key? key,required this.currentIndex});
+  int currentIndex = 0;
   @override
   State<MainPageScreen> createState() => _MainPageScreenState();
 }
 
 class _MainPageScreenState extends State<MainPageScreen> {
-  int currentIndex = 0;
   final screens = [
     const HomeScreen(),
     MenuScreen(),
@@ -20,7 +21,7 @@ class _MainPageScreenState extends State<MainPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentIndex],
+      body: screens[widget.currentIndex],
       bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
@@ -34,25 +35,23 @@ class _MainPageScreenState extends State<MainPageScreen> {
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined), label: 'Trang chủ'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book), label: 'Menu'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Menu'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.table_bar), label: 'Đặt bàn'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person), label: 'Tài khoản'),
           ],
-          currentIndex: currentIndex,
+          currentIndex: widget.currentIndex,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: const Color(0xffB3282D),
           iconSize: 25,
           onTap: (index) {
             setState(() {
-              currentIndex = index;
+              widget.currentIndex = index;
             });
           },
           unselectedItemColor: const Color(0xff6F645D),
           unselectedLabelStyle: const TextStyle(color: Color(0xff6F645D)),
-          
         ),
       ),
     );
