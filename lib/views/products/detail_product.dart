@@ -15,17 +15,29 @@ class DetailProductScreen extends StatefulWidget {
 
 class _DetailProductScreenState extends State<DetailProductScreen>
     with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.initialIndex);
+    _tabController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(
-        length: 3, vsync: this, initialIndex: widget.initialIndex);
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
           physics: const ScrollPhysics(),
           slivers: [
             SliverPersistentHeader(
-              delegate: CustomSliverAppBarDelegate(expandedHeight: 200, product: widget.product),
+              delegate: CustomSliverAppBarDelegate(
+                  expandedHeight: 200, product: widget.product),
               pinned: true,
             ),
             buildBody(_tabController, widget.product),
@@ -81,8 +93,8 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Thêm'),
-                            Padding(
+                            const Text('Thêm'),
+                            const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.fiber_manual_record,
@@ -140,7 +152,13 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                   height: 500,
                   child: TabBarView(
                     controller: tabCtrl,
-                    children: [DetailsTab(product: product,), const Text('there'), detailsTab()],
+                    children: [
+                      DetailsTab(
+                        product: product,
+                      ),
+                      const Text('there'),
+                      detailsTab()
+                    ],
                   ),
                 )
               ],
@@ -161,7 +179,8 @@ class _DetailProductScreenState extends State<DetailProductScreen>
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   Product product;
-  CustomSliverAppBarDelegate({required this.expandedHeight, required this.product});
+  CustomSliverAppBarDelegate(
+      {required this.expandedHeight, required this.product});
 
   @override
   Widget build(
@@ -198,7 +217,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
               children: [
                 Text(
                   product.productName,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -206,11 +226,11 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('${product.categoryname!} '),
-                      Icon(
+                      const Icon(
                         Icons.fiber_manual_record,
                         size: 10,
                       ),
-                      Text(' Tốt cho sức khỏe')
+                      const Text(' Tốt cho sức khỏe')
                     ],
                   ),
                 ),
@@ -231,7 +251,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                           color: Colors.yellow[700],
                         ),
                         label: const Text('4.9')),
-                     Text(product.price)
+                    Text(product.price)
                   ],
                 )
               ],

@@ -12,7 +12,7 @@ class DetailsTab extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20, bottom: 20),
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
               width: 150,
               height: 150,
               child: Image(image: NetworkImage(product.image)),
@@ -29,7 +29,7 @@ class DetailsTab extends StatelessWidget {
                       style: TextStyle(color: Colors.black, height: 1),
                     ),
                     style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
                         primary: Colors.red,
                         backgroundColor: Colors.grey[200],
                         shape: RoundedRectangleBorder(
@@ -37,7 +37,7 @@ class DetailsTab extends StatelessWidget {
                   ),
                 ),
                 Row(
-                  children: [
+                  children: const [
                     Icon(
                       Icons.star,
                       color: Colors.yellow,
@@ -65,12 +65,12 @@ class DetailsTab extends StatelessWidget {
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
+              child: const Text(
                 'Product Description',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
-            Text(
+            const Text(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.')
           ],
         ),
