@@ -2,6 +2,7 @@ import 'package:essays/models/product.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
 import 'package:essays/views/products/details_tab.dart';
+import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
 
 class DetailProductScreen extends StatefulWidget {
@@ -101,7 +102,7 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                                 size: 5,
                               ),
                             ),
-                            Text(widget.product.price)
+                            Text(moneyFormat(widget.product.price.toString())!)
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
@@ -206,6 +207,8 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double apper(double shrinkOffset) => shrinkOffset / expandedHeight;
   double disapper(double shrinkOffset) => 1 - shrinkOffset / expandedHeight;
   Widget buildFloating(double shrinkOffset, Product product) {
+    
+
     return Opacity(
       opacity: disapper(shrinkOffset),
       child: Card(
@@ -251,7 +254,7 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                           color: Colors.yellow[700],
                         ),
                         label: const Text('4.9')),
-                    Text(product.price)
+                    Text(moneyFormat(product.price.toString())!)
                   ],
                 )
               ],

@@ -13,25 +13,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+  final _user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    final _user = FirebaseAuth.instance.currentUser!;
     context.read<ProductBloc>().add(LoadHotProductEvent());
     return Scaffold(
       appBar: AppBar(
         primary: true,
         elevation: 1,
-        backgroundColor: const Color(0xff44CECA),
+        backgroundColor: Colors.white,
         title: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
           if (state is AuthenticatedState) {
+            DateTime time = DateTime.now();
+            String session = '';
+            time.hour <= 10
+                ? session = 'Chào buổi sáng'
+                : time.hour <= 13
+                    ? session = 'Chào buổi trưa'
+                    : time.hour <= 18
+                        ? session = 'Chào buổi chiều'
+                        : session = 'Chào buổi tối';
             return Text(
-              'Good morning, ${state.userMap['name']}',
+              '$session, ${state.userMap['name']}',
               style: const TextStyle(
                   fontSize: 16,
-                  color: Colors.white70,
+                  color: Colors.black,
                   fontWeight: FontWeight.w500),
             );
           } else {
@@ -46,7 +55,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: const Icon(
               Icons.shopping_cart_checkout_rounded,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           const SizedBox(
@@ -385,7 +394,9 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailProductScreen(product: state.products[index],)));
+                                  builder: (context) => DetailProductScreen(
+                                        product: state.products[index],
+                                      )));
                         },
                         child: Card(
                           child: Stack(
@@ -419,7 +430,7 @@ class HomeScreen extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              '${state.moneyFormat(state.products[index].price)}đ'),
+                                              '${state.moneyFormat(state.products[index].price.toString())}đ'),
                                           SizedBox(
                                             height: 30,
                                             child: TextButton.icon(

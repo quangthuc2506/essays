@@ -18,10 +18,11 @@ class _CartScreenState extends State<CartScreen> {
   bool check2 = true;
   int ship = 0;
   String note = '';
+  final TextEditingController _noteController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     context.read<CartBloc>().add(LoadCartsEvent());
-    TextEditingController _noteController = TextEditingController();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -123,6 +124,7 @@ class _CartScreenState extends State<CartScreen> {
                                       setState(() {
                                         check1 = false;
                                         check2 = true;
+
                                         ship = 20000;
                                       });
                                     },
@@ -489,7 +491,8 @@ class _CartScreenState extends State<CartScreen> {
                                                         BorderRadius.circular(
                                                             5)),
                                                 child: Text(
-                                                  state.carts[index].amount!,
+                                                  state.carts[index].amount!
+                                                      .toString(),
                                                   style: const TextStyle(
                                                       color: Color(0xffBE965B)),
                                                 ),
@@ -558,7 +561,8 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   Text(
                                                     state.moneyFormat(state
-                                                        .carts[index].price!)!,
+                                                        .carts[index].price!
+                                                        .toString())!,
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   )
@@ -601,16 +605,28 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       Text(
                           state is LoadedCartState
-                              ? state.moneyFormat(state.getPriceTotal().toString()).toString()
-                              : '',
+                              ? state.carts.isNotEmpty
+                                  ? state
+                                      .moneyFormat(
+                                          state.getPriceTotal().toString())
+                                      .toString()
+                                  : '0đ'
+                              : '0đ',
                           style: const TextStyle(color: Colors.grey))
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Phí ship', style: TextStyle(color: Colors.grey)),
-                      Text('20.000', style: TextStyle(color: Colors.grey))
+                    children: [
+                      const Text('Phí ship',
+                          style: TextStyle(color: Colors.grey)),
+                      Text(
+                          state is LoadedCartState
+                              ? state.carts.isNotEmpty
+                                  ? "${state.moneyFormat(ship.toString()).toString()}đ"
+                                  : '0đ'
+                              : '0đ',
+                          style: const TextStyle(color: Colors.grey))
                     ],
                   ),
                   const SizedBox(
@@ -622,7 +638,8 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             Text(
                                 'Tổng cộng(${state.getAmountTotal().toString()} món)'),
-                            Text('${state.moneyFormat(state.getPriceTotal().toString())}đ')
+                            Text(
+                                '${state.carts.isNotEmpty ? state.moneyFormat(state.getPriceTotal().toString()) : '0'}đ')
                           ],
                         )
                       : Row(
@@ -693,11 +710,23 @@ class _CartScreenState extends State<CartScreen> {
             ),
             BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
+                int total = 0;
+                state is LoadedCartState
+                    ? state.carts.isNotEmpty
+                        ? total = state.getPriceTotal()
+                        : '1'
+                    : '0';
                 return ElevatedButton(
-                  onPressed: () {},
+                  onPressed: state is LoadedCartState
+                      ? state.getPriceTotal() == 0
+                          ? null
+                          : () {
+                              print('ok');
+                            }
+                      : null,
                   child: state is LoadedCartState
                       ? Text(
-                          'Đặt ${state.getAmountTotal().toString()} món: ${state.moneyFormat((state.getPriceTotal() + ship).toString())}đ')
+                          'Đặt ${state.getAmountTotal().toString()} món: ${state.moneyFormat((total + ship).toString())}đ')
                       : const Text('Chưa có hàng trong giỏ'),
                   style: ElevatedButton.styleFrom(
                       primary: const Color(0xffB3282D),

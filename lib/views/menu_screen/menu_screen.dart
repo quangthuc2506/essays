@@ -141,7 +141,9 @@ class MenuScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPageScreen(currentIndex: 2,)));
+                          builder: (context) => MainPageScreen(
+                                currentIndex: 2,
+                              )));
                 },
                 icon: SizedBox(
                     width: 24,
@@ -270,8 +272,10 @@ class MenuScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CouponScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CouponScreen()));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -328,7 +332,9 @@ class MenuScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailProductScreen(product: state.products[index],)));
+                                  builder: (context) => DetailProductScreen(
+                                        product: state.products[index],
+                                      )));
                         },
                         child: Column(
                           children: [
@@ -373,7 +379,9 @@ class MenuScreen extends StatelessWidget {
                                         ],
                                       ),
                                       Text(
-                                        state.moneyFormat(state.products[index].price)!,
+                                        state.moneyFormat(state
+                                            .products[index].price
+                                            .toString())!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w700),
                                       ),
@@ -381,9 +389,11 @@ class MenuScreen extends StatelessWidget {
                                       Row(
                                         children: [
                                           Container(
-                                            child: const Text(
-                                              "Giảm 20%",
-                                              style: TextStyle(
+                                            child: Text(
+                                              state.products[index].sale!.isNotEmpty
+                                                  ? state.products[index].sale!
+                                                  : 'Phổ biến',
+                                              style: const TextStyle(
                                                   color: Color(0xff957461),
                                                   fontWeight: FontWeight.w600),
                                             ),

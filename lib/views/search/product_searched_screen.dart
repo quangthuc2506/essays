@@ -197,7 +197,7 @@ class ProductSearchedScreen extends StatelessWidget {
                                           ],
                                         ),
                                         Text(
-                                          state.products[index].price,
+                                          state.products[index].price.toString(),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w700),
                                         ),

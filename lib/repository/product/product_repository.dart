@@ -32,6 +32,15 @@ class ProductRepository extends BaseProductRepository {
     return categoriesList1;
   }
 
+  getReview(Product product) async {
+    _firebaseFirestore
+        .collection('product')
+        .doc(product.productId)
+        .collection('review')
+        .snapshots()
+        .map((snapshot) => null);
+  }
+
   String getCategoryName(String categoryId) {
     for (Category ct in categoriesList!) {
       if (ct.categoryId == categoryId) {
@@ -88,6 +97,4 @@ class ProductRepository extends BaseProductRepository {
     }
     return filteredList;
   }
-
-  
 }

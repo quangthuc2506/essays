@@ -5,22 +5,24 @@ class Product {
   String productId;
   String productName;
   String details;
-  String price;
+  int price;
   String image;
   String review;
-  String? amount;
+  int? amount;
   String? categoryname;
-  Product(
-      {required this.categoryId,
-      required this.productId,
-      required this.productName,
-      required this.details,
-      required this.image,
-      required this.price,
-      required this.review,
-      this.amount,
-      this.categoryname
-      });
+  String? sale;
+  Product({
+    required this.categoryId,
+    required this.productId,
+    required this.productName,
+    required this.details,
+    required this.image,
+    required this.price,
+    required this.review,
+    this.amount,
+    this.categoryname,
+    this.sale
+  });
   static Product fromSnapshot(DocumentSnapshot snap) {
     Product product = Product(
         categoryId: snap['categoryId'],
@@ -30,7 +32,9 @@ class Product {
         image: snap['image'],
         price: snap['price'],
         review: snap['review'],
-        amount: snap['amount']);
+        amount: snap['amount'],
+        sale: snap['sale']
+        );
     return product;
   }
 

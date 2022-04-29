@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Cart {
   String? email;
   String? productId;
-  String? amount;
-  String? price;
+  int? amount;
+  int? price;
   String? image;
   String? productName;
   String? note;

@@ -5,7 +5,7 @@ import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainPageScreen extends StatefulWidget {
-  MainPageScreen({Key? key,required this.currentIndex});
+  MainPageScreen({Key? key, required this.currentIndex});
   int currentIndex = 0;
   @override
   State<MainPageScreen> createState() => _MainPageScreenState();
@@ -13,7 +13,7 @@ class MainPageScreen extends StatefulWidget {
 
 class _MainPageScreenState extends State<MainPageScreen> {
   final screens = [
-    const HomeScreen(),
+    HomeScreen(),
     MenuScreen(),
     const ReserveScreen(),
     const PersonalScreen()

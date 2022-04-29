@@ -33,7 +33,7 @@ class CartRepository extends BaseCartRepository {
   Future<void> addToCart(Product product) async {
     String email = FirebaseAuth.instance.currentUser!.email!;
     Map<String, dynamic> productMap = {
-      'amount': '1',
+      'amount': 1,
       'note': '',
       'email': FirebaseAuth.instance.currentUser!.email,
       'productName': product.productName,

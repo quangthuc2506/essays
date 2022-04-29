@@ -67,11 +67,11 @@ class _ReserveScreenState extends State<ReserveScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xff44CECA),
+        backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
           'Đặt bàn',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -122,7 +122,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     child: Text(
                       'Ngày ${dateTime.day} tháng ${dateTime.month} năm ${dateTime.year}',
                       style: const TextStyle(
-                          fontSize: 22.0, color: Color(0xff44CECA)),
+                          fontSize: 22.0, color: Color(0xffCFB794)),
                     ),
                   ),
                   Row(
@@ -152,7 +152,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     child: Text(
                       '${dateTime.hour} giờ ${dateTime.minute} phút',
                       style: const TextStyle(
-                          fontSize: 22.0, color: Color(0xff44CECA)),
+                          fontSize: 22.0, color: Color(0xffcfb794)),
                     ),
                   ),
                   Row(
@@ -187,7 +187,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                                     borderRadius: BorderRadius.circular(8)),
                                 child: const Icon(
                                   Icons.remove,
-                                  color: Color(0xff44CECA),
+                                  color: Color(0xffB3282D),
                                 )),
                           ),
                           Padding(
@@ -215,7 +215,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                                     borderRadius: BorderRadius.circular(8)),
                                 child: const Icon(
                                   Icons.add,
-                                  color: Color(0xff44CECA),
+                                  color: Color(0xffB3282D),
                                 )),
                           ),
                         ],
@@ -262,7 +262,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     icon: const Icon(Icons.verified),
                     label: const Text('Xác nhận'),
                     style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff44CECA)),
+                        primary: const Color(0xffb3282d)),
                   )
                 ],
               ),

@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 class DetailsTab extends StatelessWidget {
   Product product;
   DetailsTab({Key? key, required this.product}) : super(key: key);
+  String? moneyFormat(String price) {
+    if (price.length > 2) {
+      var value = price;
+      value = value.replaceAll(RegExp(r'\D'), '');
+      value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.');
+      return value;
+    } else {
+      return '0';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +34,9 @@ class DetailsTab extends StatelessWidget {
                   height: 30,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text(
-                      '30.000đ',
-                      style: TextStyle(color: Colors.black, height: 1),
+                    child: Text(
+                      moneyFormat(product.price.toString())!,
+                      style: const TextStyle(color: Colors.black, height: 1),
                     ),
                     style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 25),

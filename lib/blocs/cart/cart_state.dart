@@ -10,7 +10,7 @@ class LoadedCartState extends CartState {
   getAmountTotal() {
     int amountTotal = 0;
     for (Cart cart in carts) {
-      amountTotal += int.parse(cart.amount!);
+      amountTotal += cart.amount!;
     }
     return amountTotal;
   }
@@ -18,7 +18,7 @@ class LoadedCartState extends CartState {
   int getPriceTotal() {
     int priceTotal = 0;
     for (Cart cart in carts) {
-      priceTotal += int.parse(cart.amount!) * int.parse(cart.price!);
+      priceTotal += cart.amount! * cart.price!;
     }
 
     return priceTotal;
@@ -30,6 +30,8 @@ class LoadedCartState extends CartState {
       value = value.replaceAll(RegExp(r'\D'), '');
       value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.');
       return value;
+    } else {
+      return '0';
     }
     return null;
   }
