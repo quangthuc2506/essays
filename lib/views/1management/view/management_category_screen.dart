@@ -4,6 +4,7 @@ import 'package:essays/models/product.dart';
 import 'package:essays/repository/category/category_repository.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/values/app_assets.dart';
+import 'package:essays/views/1management/view/management_product_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryManagementScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
   }
 
   void getAllCategories() async {
-    categories = await _categoryRepository.getCategories();
+    categories = await _categoryRepository.getAllCategories2();
     categoriesMap = categories;
 
     setState(() {});
@@ -53,7 +54,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    categories.isEmpty ? const Center(child: CircularProgressIndicator()):
+    Scaffold(
       appBar: AppBar(
         flexibleSpace: const Image(
           image: AssetImage(AppAssets.backgroundAppbar),
@@ -78,7 +81,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               child: TextFormField(
                 onChanged: (value) async {
                   categories =
-                      await _categoryRepository.getCategories(value: value);
+                      await _categoryRepository.getAllCategories2(value: value);
                   setState(() {});
                 },
                 style: const TextStyle(color: Colors.grey),
@@ -111,7 +114,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                   width: MediaQuery.of(context).size.width * 0.3,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: categoriesMap.isEmpty
-                      ? const CircularProgressIndicator()
+                      ? const Center(child: CircularProgressIndicator())
                       : DropdownButtonFormField(
                           dropdownColor: const Color(0xff252836),
                           // set value is first index in categories
@@ -136,11 +139,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                             print('value: ${value.categoryName}');
                             if (value.categoryName == 'All') {
                               categories =
-                                  await _categoryRepository.getCategories();
+                                  await _categoryRepository.getAllCategories2();
                               setState(() {});
                             } else {
                               categories = await _categoryRepository
-                                  .getCategories(value: value.categoryName);
+                                  .getAllCategories2(value: value.categoryName);
                               setState(() {});
                             }
                           },
@@ -160,7 +163,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 SizedBox(
                   height: 40,
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProductsManagementScreen()));
+                    },
                     icon: const Icon(Icons.tune),
                     label: const Text("Quản lý sản phẩm"),
                     style: ElevatedButton.styleFrom(

@@ -135,6 +135,7 @@ class ProductRepository extends BaseProductRepository {
             price: 0,
             review: "",
             sale: "",
+            cost: 0,
             amount: 0),
       );
       for (Product item in list) {
@@ -154,6 +155,7 @@ class ProductRepository extends BaseProductRepository {
             price: 0,
             review: "",
             sale: "",
+            cost: 0,
             amount: 0),
       );
       for (Product item in list) {

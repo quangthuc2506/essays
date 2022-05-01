@@ -19,7 +19,7 @@ class CategoryRepository extends BaseCategoryRepository {
   }
 
   @override
-  Future<List<Category>> getCategories({String? value}) async {
+  Future<List<Category>> getAllCategories2({String? value}) async {
     List<Category> list = await _firebaseFirestore
         .collection('category')
         .snapshots()
