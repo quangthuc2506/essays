@@ -40,5 +40,6 @@ class AppAssets {
   static const people8 = imagePath + '8people.png';
   static const reserveBanner = imagePath + 'reserveBanner.png';
   static const dessertIcon = imagePath + 'dessertIcon.png';
-   static const giftIcon = imagePath + 'giftIcon.png';
+  static const giftIcon = imagePath + 'giftIcon.png';
+  static const backgroundAppbar = imagePath + 'backgroundAppbar.jpg';
 }

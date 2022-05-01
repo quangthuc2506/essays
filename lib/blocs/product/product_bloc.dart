@@ -27,10 +27,19 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         });
       } catch (e) {}
     });
-    on<SearchProductByNameEvent>((event, emit) async{
+    on<SearchProductByNameEvent>((event, emit) async {
       try {
-        await productRepository.searchProduct(productName: event.productName).then((products) => add(UpdatedProductEvent(products)));
+        await productRepository
+            .searchProduct(productName: event.productName)
+            .then((products) => add(UpdatedProductEvent(products)));
       } catch (e) {}
+    });
+    on<SearchByCategoryEvent>((event, emit) {
+      productRepository
+          .searchProductsByCategoryname(categoryName: event.categoryName)
+          .listen((products) {
+        return add(UpdatedProductEvent(products));
+      });
     });
   }
 }

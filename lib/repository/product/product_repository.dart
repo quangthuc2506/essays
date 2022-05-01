@@ -97,4 +97,102 @@ class ProductRepository extends BaseProductRepository {
     }
     return filteredList;
   }
+
+  @override
+  Stream<List<Product>> searchProductsByCategoryname(
+      {required String categoryName}) async* {
+    String? id;
+    id = getCategoryId(categoryName);
+    yield* _firebaseFirestore
+        .collection('products')
+        .where('categoryId', isEqualTo: id)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Product.fromSnapshot(doc)).toList();
+    });
+  }
+
+  @override
+  Future<List<Product>> getAllProduct2({String? value}) async {
+    List<Product> list = await _firebaseFirestore
+        .collection('product')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Product.fromSnapshot(doc);
+      }).toList();
+    }).first;
+    List<Product> filteredList = [];
+    if (value != null) {
+      filteredList.insert(
+        0,
+        Product(
+            categoryId: "",
+            productId: "",
+            productName: "",
+            details: "",
+            image: "",
+            price: 0,
+            review: "",
+            sale: "",
+            amount: 0),
+      );
+      for (Product item in list) {
+        if (item.productName.toLowerCase().contains(value.toLowerCase())) {
+          filteredList.add(item);
+        }
+      }
+    } else {
+      filteredList.insert(
+        0,
+        Product(
+            categoryId: "",
+            productId: "",
+            productName: "",
+            details: "",
+            image: "",
+            price: 0,
+            review: "",
+            sale: "",
+            amount: 0),
+      );
+      for (Product item in list) {
+        filteredList.add(item);
+      }
+    }
+    return filteredList;
+  }
+
+  Future<List<Product>> getProductsByCategoryId({String? value}) async {
+    List<Product> list = await _firebaseFirestore
+        .collection('product')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Product.fromSnapshot(doc);
+      }).toList();
+    }).first;
+    List<Product> filteredList = [];
+
+    filteredList.insert(
+      0,
+      Product(
+          categoryId: "",
+          productId: "",
+          productName: "",
+          details: "",
+          image: "",
+          price: 0,
+          review: "",
+          sale: "",
+          amount: 0),
+    );
+    for (Product item in list) {
+      if (item.categoryId == value) {
+        filteredList.add(item);
+      }
+    }
+
+    return filteredList;
+  }
 }

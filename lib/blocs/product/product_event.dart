@@ -16,3 +16,7 @@ class SearchProductByNameEvent extends ProductEvent {
   final String productName;
   SearchProductByNameEvent({required this.productName});
 }
+class SearchByCategoryEvent extends ProductEvent{
+  final String categoryName;
+  SearchByCategoryEvent({required this.categoryName});
+}
