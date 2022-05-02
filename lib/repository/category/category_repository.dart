@@ -55,4 +55,16 @@ class CategoryRepository extends BaseCategoryRepository {
 
     return filteredList;
   }
+
+  addNewCategory(String image, String categoryId, String categoryName) async {
+    Map<String, dynamic> map = {
+      'icon': image,
+      'categoryId': categoryId,
+      'categoryName': categoryName
+    };
+    await FirebaseFirestore.instance
+        .collection('category')
+        .doc(categoryId)
+        .set(map);
+  }
 }

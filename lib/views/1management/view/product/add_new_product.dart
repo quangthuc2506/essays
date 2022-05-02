@@ -1,31 +1,39 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:essays/models/category.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/category/category_repository.dart';
+import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/widgets/product_edit_my_text_form_field.dart';
 import 'package:flutter/material.dart';
 
-class ProductEditScreen extends StatefulWidget {
+class AddNewProductScreen extends StatefulWidget {
   Product product;
-
-  ProductEditScreen({Key? key, required this.product}) : super(key: key);
+  AddNewProductScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  State<ProductEditScreen> createState() => _ProductEditScreenState();
+  State<AddNewProductScreen> createState() => _AddNewProductScreenState();
 }
 
-class _ProductEditScreenState extends State<ProductEditScreen> {
+class _AddNewProductScreenState extends State<AddNewProductScreen> {
   final CategoryRepository _categoryRepository = CategoryRepository();
+  final ProductRepository _productRepository = ProductRepository();
 
-  List<Category> categories = [];
   final TextEditingController _maSPController = TextEditingController();
   final TextEditingController _tenSPController = TextEditingController();
   final TextEditingController _giavonController = TextEditingController();
   final TextEditingController _giaBanController = TextEditingController();
   final TextEditingController _tonKhoController = TextEditingController();
   final TextEditingController _moTaSPController = TextEditingController();
+  final TextEditingController _saleController = TextEditingController();
+  List<Category> categories = [];
+  String imageUrl = '';
+  Category? category;
   getAllCategories() async {
     categories = await _categoryRepository.getAllCategories2();
+    categories.removeAt(0);
+    category = categories[0];
+
     setState(() {});
   }
 
@@ -37,22 +45,28 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
+  bool checkValidate() {
+    if (imageUrl.isEmpty ||
+        _maSPController.text.isEmpty ||
+        _tenSPController.text.isEmpty ||
+        _tenSPController.text.isEmpty ||
+        _giaBanController.text.isEmpty ||
+        _giavonController.text.isEmpty ||
+        _tonKhoController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void initState() {
     getAllCategories();
-    _tenSPController.text = widget.product.productName;
-    _maSPController.text = widget.product.productId;
-    _giaBanController.text = widget.product.price.toString();
-    _giavonController.text = widget.product.cost.toString();
-    _tonKhoController.text = widget.product.amount.toString();
-    _moTaSPController.text = widget.product.details;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    print('product name: ${categories.length}');
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -62,7 +76,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
           ),
-          title: const Text("Product Edit"),
+          title: const Text("Thêm sản phẩm"),
           backgroundColor: const Color(0xff1E212C),
           centerTitle: true,
           elevation: 0,
@@ -82,7 +96,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             height: 50,
             width: 135,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text(
                 "Huỷ bỏ",
                 textAlign: TextAlign.center,
@@ -100,8 +116,35 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             height: 50,
             width: 135,
             child: ElevatedButton(
-              onPressed: () {},
-              child: const Text("Lưu"),
+              onPressed: () {
+                if (checkValidate()) {
+                  _productRepository.addNewProduct(
+                      int.parse(_tonKhoController.text),
+                      category!.categoryId,
+                      int.parse(_giavonController.text),
+                      _moTaSPController.text,
+                      imageUrl,
+                      int.parse(_giaBanController.text),
+                      _maSPController.text,
+                      _tenSPController.text,
+                      _moTaSPController.text,
+                      _saleController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Thêm sản phẩm thành công'),
+                    ),
+                  );
+                  Navigator.pop(context);
+
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Vui lòng nhập đủ thông tin'),
+                    ),
+                  );
+                }
+              },
+              child: const Text("Thêm"),
               style: ElevatedButton.styleFrom(
                   primary: const Color(0xff3ac5c8),
                   shape: RoundedRectangleBorder(
@@ -124,8 +167,52 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.width * 0.4,
                 margin: const EdgeInsets.all(20),
-                child: Image.network(
-                    widget.product.image),
+                child: InkWell(
+                  onTap: () async {
+                    imageUrl = await _productRepository.getImage();
+                    setState(() {});
+                    // Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) =>
+                    //                       AddNewProductScreen(
+                    //                           product: product)));
+                  },
+                  child: imageUrl.isNotEmpty
+                      ? Image(
+                          image: NetworkImage(imageUrl),
+                        )
+                      : Card(
+                          color: Colors.white,
+                          child: DottedBorder(
+                              color: Colors.red,
+                              strokeWidth: 1,
+                              radius: const Radius.circular(5),
+                              borderType: BorderType.RRect,
+                              dashPattern: const [5, 5],
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.add,
+                                      color: Color(0xffEA7C69),
+                                      size: 25,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      "Thêm ảnh",
+                                      style: TextStyle(
+                                          color: Color(0xffea7c69),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                              ))),
+                ),
               ),
               Container(
                 height: 40,
@@ -138,7 +225,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                     : DropdownButtonFormField(
                         dropdownColor: const Color(0xff252836),
                         // set value is first index in categories
-                        value: getNameById(widget.product.categoryId),
+                        value: categories[1],
                         style: const TextStyle(
                             color: Colors.grey,
                             overflow: TextOverflow.ellipsis),
@@ -157,11 +244,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                             )
                             .toList(),
                         onChanged: (dynamic value) async {
-                          print('value: ${value.categoryName}');
-                          if (value.categoryName == 'All') {
-                          } else {
-                            
-                          }
+                          category = value;
+                          setState(() {});
                         },
                         decoration: InputDecoration(
                           fillColor: Colors.white,
@@ -205,40 +289,22 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   myTextFormField(
-                      controller: _tonKhoController,
-                      prefixIcon: Icons.opacity,
-                      labelText: "Tồn kho",
-                      width: width * 0.5,
-                      readOnly: true),
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10, left: 10),
-                        height: 40,
-                        width: 100,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Cập nhật tồn kho",
-                            textAlign: TextAlign.center,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              primary: const Color(0xff3ac5c8),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                        ),
-                      ),
-                    ],
-                  )
+                    controller: _tonKhoController,
+                    prefixIcon: Icons.opacity,
+                    labelText: "Tồn kho",
+                    width: width * 0.5,
+                  ),
                 ],
               ),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 85),
-                child: myTextFormField(
-                    controller: _moTaSPController,
-                    prefixIcon: Icons.description,
-                    labelText: "Mô tả",
-                    height: height),
+              myTextFormField(
+                controller: _moTaSPController,
+                prefixIcon: Icons.description,
+                labelText: "Mô tả",
+              ),
+              myTextFormField(
+                controller: _saleController,
+                prefixIcon: Icons.description,
+                labelText: "Sale",
               ),
               // SizedBox(
               //   height: 60,

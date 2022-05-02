@@ -20,6 +20,7 @@ class Login2Screen extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
+            
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => MainPageScreen(currentIndex: 0,)));
           }

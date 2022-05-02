@@ -1,6 +1,6 @@
 import 'package:essays/views/1management/view/manage_home_page_screen.dart';
-import 'package:essays/views/1management/view/management_product_screen.dart';
-import 'package:essays/views/menu_screen/menu_screen.dart';
+import 'package:essays/views/1management/view/product/management_product_screen.dart';
+import 'package:essays/views/1management/view/staff/management_staff.dart';
 import 'package:essays/views/personal/personal_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class ManageMainPageScreen extends StatefulWidget {
 class _ManageMainPageScreenState extends State<ManageMainPageScreen> {
   final screens = [
     ManageHomeScreen(),
-    MenuScreen(),
+    const StaffManagementScreen(),
     const ProductsManagementScreen(),
     const PersonalScreen()
   ];

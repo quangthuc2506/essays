@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   context.read<AuthBloc>().add(CheckedSignInEvent(email: snapshot.data!.email));
-                  return ManageMainPageScreen(currentIndex: 2,);
+                  return ManageMainPageScreen(currentIndex: 1,);
                 }
                 return Login2Screen();
               },

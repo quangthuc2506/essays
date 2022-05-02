@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/models/category.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/base_product_repository.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class ProductRepository extends BaseProductRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -196,5 +201,89 @@ class ProductRepository extends BaseProductRepository {
     }
 
     return filteredList;
+  }
+
+  File? imageFile;
+  Future<String> getImage() async {
+    ImagePicker _picker = ImagePicker();
+    String imgUrl = '';
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) async {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        imgUrl = await uploadImage();
+        return imgUrl;
+      }
+    });
+    return imgUrl;
+  }
+
+  Future<String> uploadImage() async {
+    String fileName = const Uuid().v1();
+    var ref =
+        FirebaseStorage.instance.ref().child('images').child('$fileName.jpg');
+    var uploadTask = await ref.putFile(imageFile!);
+
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+    return imageUrl;
+  }
+
+  addNewProduct(
+      int amount,
+      String categoryId,
+      int cost,
+      String details,
+      String image,
+      int price,
+      String productId,
+      String productName,
+      String? review,
+      String? sale) async {
+    review ??= '5';
+    sale ??= 'Phổ biến';
+    Map<String, dynamic> productMap = {
+      'amount': amount,
+      'categoryId': categoryId,
+      'cost': cost,
+      'details': details,
+      'image': image,
+      'price': price,
+      'productId': productId,
+      'productName': productName,
+      'review': review,
+      'sale': sale
+    };
+    await FirebaseFirestore.instance
+        .collection('product')
+        .doc(productId)
+        .set(productMap);
+  }
+
+  updateProduct(
+      int amount,
+      String categoryId,
+      int cost,
+      String details,
+      String image,
+      int price,
+      String productId,
+      String productName,
+      String? review,
+      String? sale) async {
+    Map<String, dynamic> productMap = {
+      'amount': amount,
+      'categoryId': categoryId,
+      'cost': cost,
+      'details': details,
+      'image': image,
+      'price': price,
+      'productId': productId,
+      'productName': productName,
+      'review': review,
+      'sale': sale
+    };
+    await FirebaseFirestore.instance
+        .collection('product')
+        .doc(productId)
+        .update(productMap);
   }
 }
