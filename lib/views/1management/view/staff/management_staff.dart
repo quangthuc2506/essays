@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/values/app_assets.dart';
-import 'package:essays/views/1management/model/user.dart';
+import 'package:essays/views/1management/model/base_user.dart';
+import 'package:essays/views/1management/view/staff/add_new_staff.dart';
 import 'package:essays/views/1management/view/staff/edit_staff.dart';
 import 'package:flutter/material.dart';
 
@@ -12,16 +13,16 @@ class StaffManagementScreen extends StatefulWidget {
 }
 
 class _StaffManagementScreenState extends State<StaffManagementScreen> {
-  List<User> users = [];
+  List<BaseUser> users = [];
 
-  Stream<List<User>> getUsers() {
+  Stream<List<BaseUser>> getUsers() {
     return FirebaseFirestore.instance
         .collection('user')
         .where('position', whereIn: ['Phục vụ', 'Thu ngân', 'Chủ'])
         .snapshots()
         .map((snapshot) {
           print("snapshot category: ${snapshot.docs.length}");
-          return snapshot.docs.map((doc) => User.fromSnapshot(doc)).toList();
+          return snapshot.docs.map((doc) => BaseUser.fromSnapshot(doc)).toList();
         });
   }
 
@@ -57,9 +58,14 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddNewStaffScreen()));
+            },
             child: const Padding(
-              padding: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.only(right: 10, left: 20),
               child: Icon(Icons.add, color: Colors.white),
             ),
           )
@@ -79,7 +85,10 @@ class _StaffManagementScreenState extends State<StaffManagementScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context)=>EditStaffScreen(user: users[index])));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditStaffScreen(user: users[index])));
                       },
                       child: Container(
                         color: Colors.white,

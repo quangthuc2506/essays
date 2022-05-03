@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/values/app_assets.dart';
-import 'package:essays/views/1management/model/user.dart';
+import 'package:essays/views/1management/model/base_user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditStaffScreen extends StatefulWidget {
   EditStaffScreen({Key? key, required this.user}) : super(key: key);
-  User user;
+  BaseUser user;
   @override
   State<EditStaffScreen> createState() => _EditStaffScreenState();
 }
@@ -13,9 +15,10 @@ class _EditStaffScreenState extends State<EditStaffScreen> {
   dynamic val;
   @override
   void initState() {
-   val = widget.user.position;
+    val = widget.user.position;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,15 +36,28 @@ class _EditStaffScreenState extends State<EditStaffScreen> {
               Icons.arrow_back_ios_rounded,
               color: Colors.white,
             ),
-          ),actions: [
-          InkWell(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 10,left: 20),
-              child: Icon(Icons.check, color: Colors.white),
-            ),
-          )
-        ],
+          ),
+          actions: [
+            InkWell(
+              onTap: () async {
+                await FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .update({'position': val});
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Đã thêm nhân viên'),
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(right: 10, left: 20),
+                child: Icon(Icons.check, color: Colors.white),
+              ),
+            )
+          ],
           title: const Text("Nhân sự"),
           centerTitle: true,
           elevation: 0,
@@ -176,11 +192,72 @@ class _EditStaffScreenState extends State<EditStaffScreen> {
                 const Divider(
                   height: 0,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    'Xoá nhân viên',
-                    style: TextStyle(color: Colors.red, fontSize: 20),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: InkWell(
+                    onTap: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AlertDialog(
+                                    content: Column(
+                                  children: [
+                                    const Text(
+                                      'Sau khi xoá sẽ không thể phục hồi?',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        SizedBox(
+                                          width: 100,
+                                          child: ElevatedButton(
+                                              onPressed: () async {
+                                                await FirebaseFirestore.instance
+                                                    .collection('user')
+                                                    .doc(FirebaseAuth.instance
+                                                        .currentUser!.uid)
+                                                    .update({'position': ''});
+
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Đã xoá nhân viên'),
+                                                  ),
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('xác nhận')),
+                                        ),
+                                        SizedBox(
+                                            width: 100,
+                                            child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('Huỷ'))),
+                                      ],
+                                    )
+                                  ],
+                                ))
+                              ],
+                            );
+                          });
+                    },
+                    child: const Text(
+                      'Xoá nhân viên',
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    ),
                   ),
                 ),
                 const Divider(

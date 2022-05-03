@@ -1,4 +1,5 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
+import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/blocs/product/product_bloc.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
@@ -464,7 +465,10 @@ class HomeScreen extends StatelessWidget {
                                           0.5,
                                       height: 35,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                              AddToCartEvent(product: state.products[index]));
+                                        },
                                         child: const Text(
                                           'Thêm vào đơn',
                                           style: TextStyle(

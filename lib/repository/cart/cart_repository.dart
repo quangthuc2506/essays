@@ -30,10 +30,11 @@ class CartRepository extends BaseCartRepository {
     return list;
   }
 
-  Future<void> addToCart(Product product) async {
+  Future<void> addToCart({ required Product product, int? amount}) async {
+    amount ??= 1;
     String email = FirebaseAuth.instance.currentUser!.email!;
     Map<String, dynamic> productMap = {
-      'amount': 1,
+      'amount': amount,
       'note': '',
       'email': FirebaseAuth.instance.currentUser!.email,
       'productName': product.productName,
@@ -61,11 +62,14 @@ class CartRepository extends BaseCartRepository {
     String email = FirebaseAuth.instance.currentUser!.email!;
     var emptyCarts = FirebaseFirestore.instance
         .collection('cart')
-        .where('email', isEqualTo: email).get().then((querySnapshot) {
-          var batch = _fireStore.batch();
-          for (var element in querySnapshot.docs) {batch.delete(element.reference);}
-          return batch.commit();
-        }).then((value) => null);
-    
+        .where('email', isEqualTo: email)
+        .get()
+        .then((querySnapshot) {
+      var batch = _fireStore.batch();
+      for (var element in querySnapshot.docs) {
+        batch.delete(element.reference);
+      }
+      return batch.commit();
+    }).then((value) => null);
   }
 }

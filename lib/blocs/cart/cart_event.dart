@@ -11,11 +11,13 @@ class UpdatedCartsEvent extends CartEvent {
 
 class AddToCartEvent extends CartEvent {
   final Product product;
-  AddToCartEvent({required this.product});
+  final int? amount;
+  AddToCartEvent({required this.product, this.amount});
 }
 
 class DeleteFromTheCartEvent extends CartEvent {
   final Cart cart;
   DeleteFromTheCartEvent({required this.cart});
 }
-class DeleteAllFromTheCartEvent extends CartEvent{}
+
+class DeleteAllFromTheCartEvent extends CartEvent {}

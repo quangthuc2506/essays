@@ -65,6 +65,6 @@ class CategoryRepository extends BaseCategoryRepository {
     await FirebaseFirestore.instance
         .collection('category')
         .doc(categoryId)
-        .set(map);
+        .set(map,SetOptions(merge: true),);
   }
 }

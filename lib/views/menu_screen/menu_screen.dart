@@ -194,7 +194,7 @@ class MenuScreen extends StatelessWidget {
                       return GridView.builder(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
-                        itemCount: state.categories.length,
+                        itemCount: 8,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4, childAspectRatio: 0.81818),

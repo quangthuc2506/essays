@@ -31,7 +31,8 @@ class AuthRepository extends BaseAuthRepository {
         'avatar': '',
         'phoneNumber': phoneNumber,
         'password': password,
-        'point': '0'
+        'point': '0',
+        'position':''
       });
     } on PlatformException {}
   }
@@ -66,7 +67,8 @@ class AuthRepository extends BaseAuthRepository {
         'phoneNumber': '',
         'password': '',
         'point': '0',
-        'address':''
+        'address':'',
+        'position':''
       });
     } catch (e) {
       throw Exception(e.toString());

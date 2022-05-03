@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:essays/models/category.dart';
 import 'package:essays/models/product.dart';
@@ -116,26 +117,37 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
             height: 50,
             width: 135,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (checkValidate()) {
-                  _productRepository.addNewProduct(
-                      int.parse(_tonKhoController.text),
-                      category!.categoryId,
-                      int.parse(_giavonController.text),
-                      _moTaSPController.text,
-                      imageUrl,
-                      int.parse(_giaBanController.text),
-                      _maSPController.text,
-                      _tenSPController.text,
-                      _moTaSPController.text,
-                      _saleController.text);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Thêm sản phẩm thành công'),
-                    ),
-                  );
-                  Navigator.pop(context);
-
+                  final check = await FirebaseFirestore.instance
+                      .collection('category')
+                      .where('productId', isEqualTo: _maSPController.text)
+                      .get();
+                  if (check.docs.isEmpty) {
+                    _productRepository.addNewProduct(
+                        int.parse(_tonKhoController.text),
+                        category!.categoryId,
+                        int.parse(_giavonController.text),
+                        _moTaSPController.text,
+                        imageUrl,
+                        int.parse(_giaBanController.text),
+                        _maSPController.text,
+                        _tenSPController.text,
+                        _moTaSPController.text,
+                        _saleController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Thêm sản phẩm thành công'),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Mã sản phẩm đã tồn tại!'),
+                      ),
+                    );
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

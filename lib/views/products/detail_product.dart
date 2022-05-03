@@ -1,9 +1,11 @@
+import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/cart/cart_screen.dart';
 import 'package:essays/views/products/details_tab.dart';
 import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailProductScreen extends StatefulWidget {
   Product product;
@@ -29,6 +31,7 @@ class _DetailProductScreenState extends State<DetailProductScreen>
     });
   }
 
+  int amount = 1;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,7 +59,13 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                       Row(
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (amount > 1) {
+                                setState(() {
+                                  amount--;
+                                });
+                              }
+                            },
                             child: const Icon(
                               Icons.remove,
                               color: Color(0xff44CECA),
@@ -66,13 +75,17 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                               backgroundColor: Colors.grey[300],
                             ),
                           ),
-                          const Text(
-                            '1',
-                            style: TextStyle(
+                          Text(
+                            amount.toString(),
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                amount++;
+                              });
+                            },
                             child: const Icon(
                               Icons.add,
                               color: Color(0xff44CECA),
@@ -86,6 +99,8 @@ class _DetailProductScreenState extends State<DetailProductScreen>
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          context.read<CartBloc>().add(AddToCartEvent(
+                              product: widget.product, amount: amount));
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -207,8 +222,6 @@ class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double apper(double shrinkOffset) => shrinkOffset / expandedHeight;
   double disapper(double shrinkOffset) => 1 - shrinkOffset / expandedHeight;
   Widget buildFloating(double shrinkOffset, Product product) {
-    
-
     return Opacity(
       opacity: disapper(shrinkOffset),
       child: Card(

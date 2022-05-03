@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class BaseUser {
   String? name;
   String? email;
   String? phoneNumber;
   String? position;
   String? image;
-  User({this.name, this.email, this.phoneNumber, this.position,this.image});
-  static User fromSnapshot(DocumentSnapshot snap) {
-    User user = User(
+  BaseUser({this.name, this.email, this.phoneNumber, this.position,this.image});
+  static BaseUser fromSnapshot(DocumentSnapshot snap) {
+    BaseUser user = BaseUser(
         email: snap['email'],
         name: snap['name'],
         phoneNumber: snap['phoneNumber'],

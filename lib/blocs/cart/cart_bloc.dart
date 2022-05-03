@@ -22,7 +22,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
     on<AddToCartEvent>((event, emit) {
       try {
-        cartRepository.addToCart(event.product);
+        cartRepository.addToCart(product: event.product,amount: event.amount);
       } catch (e) {}
     });
     on<DeleteFromTheCartEvent>((event, emit) async {

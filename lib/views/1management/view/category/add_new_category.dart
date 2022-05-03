@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:essays/repository/category/category_repository.dart';
 import 'package:essays/repository/product/product_repository.dart';
@@ -82,17 +83,29 @@ class _AddNewCategoryScreenState extends State<AddNewCategoryScreen> {
             height: 50,
             width: 135,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (checkValidate()) {
-                  _categoryRepository.addNewCategory(
-                      imageUrl, _maLSPController.text, _tenLSPController.text);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Thêm thành công!'),
-                    ),
-                  );
-                  Navigator.pop(context);
-
+                  final check = await FirebaseFirestore.instance
+                      .collection('category')
+                      .where('categoryId', isEqualTo: _maLSPController.text)
+                      .get();
+                  print('check 2: ${check.docs.isEmpty}');
+                  if (check.docs.isEmpty) {
+                    _categoryRepository.addNewCategory(imageUrl,
+                        _maLSPController.text, _tenLSPController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Thêm thành công!'),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Mã loại sản phẩm đã tồn tại!'),
+                      ),
+                    );
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -131,7 +144,6 @@ class _AddNewCategoryScreenState extends State<AddNewCategoryScreen> {
                       imageUrl = k;
                     }
                     setState(() {});
-                    
                   },
                   child: imageUrl.isNotEmpty
                       ? Image(
