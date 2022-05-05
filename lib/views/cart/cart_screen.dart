@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/blocs/auth/auth_bloc.dart';
 import 'package:essays/blocs/cart/cart_bloc.dart';
+import 'package:essays/models/cart.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
 import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/views/personal/change_infor.dart';
@@ -727,32 +728,27 @@ class _CartScreenState extends State<CartScreen> {
                                   FirebaseFirestore.instance;
                               final _fireAuth = FirebaseAuth.instance;
                               //// them data vao bang bill
-                              String id = DateTime.now().day.toString() +
-                                  DateTime.now().hour.toString() +
-                                  DateTime.now().minute.toString() +
-                                  DateTime.now().second.toString() +
-                                  DateTime.now().millisecond.toString() +
-                                  DateTime.now().microsecond.toString();
+                              String id = createId();
                               Map<String, dynamic> map = {
-                                'billId': id,
+                                'orderId': id,
                                 'customerId': _fireAuth.currentUser!.email,
                                 'date': FieldValue.serverTimestamp()
                               };
                               await _firebaseFirestore
-                                  .collection('bill')
-                                  .add(map);
+                                  .collection('order').doc(id)
+                                  .set(map);
 
                               ////them data vao bang billDetails
-                              for (var e in state.carts) {
+                              for (Cart e in state.carts) {
                                 Map<String, dynamic> map1 = {
-                                  'billId': id,
+                                  'orderId': id,
                                   'amount': e.amount,
                                   'price': e.price,
                                   'productId': e.productId,
-                                  'totalPrice': total
+                                  'status': 'Chờ xác nhận'
                                 };
                                 await _firebaseFirestore
-                                    .collection('billDetails')
+                                    .collection('orderDetails')
                                     .add(map1);
                               }
                               var _fireStore = FirebaseFirestore.instance;
@@ -788,5 +784,15 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  String createId() {
+    String id = DateTime.now().day.toString() +
+        DateTime.now().hour.toString() +
+        DateTime.now().minute.toString() +
+        DateTime.now().second.toString() +
+        DateTime.now().millisecond.toString() +
+        DateTime.now().microsecond.toString();
+    return id;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:essays/views/1management/order/order_screen.dart';
 import 'package:essays/views/1management/view/product/management_product_screen.dart';
 import 'package:essays/views/home_screen/home_screen.dart';
 import 'package:essays/views/menu_screen/menu_screen.dart';
@@ -14,7 +15,7 @@ class ManageMainPageScreen extends StatefulWidget {
 class _ManageMainPageScreenState extends State<ManageMainPageScreen> {
   final screens = [
     HomeScreen(),
-     MenuScreen(),
+     const OrderScreen(),
     const ProductsManagementScreen(),
     const PersonalScreen()
   ];
