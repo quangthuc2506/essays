@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/blocs/auth/auth_bloc.dart';
 import 'package:essays/blocs/cart/cart_bloc.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
 import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/views/personal/change_infor.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -720,8 +722,53 @@ class _CartScreenState extends State<CartScreen> {
                   onPressed: state is LoadedCartState
                       ? state.getPriceTotal() == 0
                           ? null
-                          : () {
-                              print('ok');
+                          : () async {
+                              final _firebaseFirestore =
+                                  FirebaseFirestore.instance;
+                              final _fireAuth = FirebaseAuth.instance;
+                              //// them data vao bang bill
+                              String id = DateTime.now().day.toString() +
+                                  DateTime.now().hour.toString() +
+                                  DateTime.now().minute.toString() +
+                                  DateTime.now().second.toString() +
+                                  DateTime.now().millisecond.toString() +
+                                  DateTime.now().microsecond.toString();
+                              Map<String, dynamic> map = {
+                                'billId': id,
+                                'customerId': _fireAuth.currentUser!.email,
+                                'date': FieldValue.serverTimestamp()
+                              };
+                              await _firebaseFirestore
+                                  .collection('bill')
+                                  .add(map);
+
+                              ////them data vao bang billDetails
+                              for (var e in state.carts) {
+                                Map<String, dynamic> map1 = {
+                                  'billId': id,
+                                  'amount': e.amount,
+                                  'price': e.price,
+                                  'productId': e.productId,
+                                  'totalPrice': total
+                                };
+                                await _firebaseFirestore
+                                    .collection('billDetails')
+                                    .add(map1);
+                              }
+                              var _fireStore = FirebaseFirestore.instance;
+                              String email =
+                                  FirebaseAuth.instance.currentUser!.email!;
+                              var emptyCarts = FirebaseFirestore.instance
+                                  .collection('cart')
+                                  .where('email', isEqualTo: email)
+                                  .get()
+                                  .then((querySnapshot) {
+                                var batch = _fireStore.batch();
+                                for (var element in querySnapshot.docs) {
+                                  batch.delete(element.reference);
+                                }
+                                return batch.commit();
+                              }).then((value) => null);
                             }
                       : null,
                   child: state is LoadedCartState

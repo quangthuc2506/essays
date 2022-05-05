@@ -26,21 +26,24 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    
     return MultiBlocProvider(
         providers: [
           BlocProvider(
               create: (context) => AuthBloc(authRepository: AuthRepository())),
-              BlocProvider(create: (context)=>CategoryBloc(categoryRepository: CategoryRepository())..add(LoadCategoriesEvent())),
-              BlocProvider(create: (context)=>ProductBloc(productRepository: ProductRepository())),
-              BlocProvider(create: (context)=>CartBloc(cartRepository: CartRepository())),
+          BlocProvider(
+              create: (context) =>
+                  CategoryBloc(categoryRepository: CategoryRepository())
+                    ..add(LoadCategoriesEvent())),
+          BlocProvider(
+              create: (context) =>
+                  ProductBloc(productRepository: ProductRepository())),
+          BlocProvider(
+              create: (context) => CartBloc(cartRepository: CartRepository())),
         ],
         child: MaterialApp(
-          
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
-              
                 primarySwatch: Colors.blue,
                 primaryColor: Colors.black,
                 appBarTheme: const AppBarTheme(
@@ -49,8 +52,12 @@ class MyApp extends StatelessWidget {
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  context.read<AuthBloc>().add(CheckedSignInEvent(email: snapshot.data!.email));
-                  return ManageMainPageScreen(currentIndex: 1,);
+                  context
+                      .read<AuthBloc>()
+                      .add(CheckedSignInEvent(email: snapshot.data!.email));
+                  return ManageMainPageScreen(
+                    currentIndex: 1,
+                  );
                 }
                 return Login2Screen();
               },
