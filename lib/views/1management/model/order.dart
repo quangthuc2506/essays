@@ -1,19 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class Order {
-  int? amount;
+  String? address;
+  String? customerId;
+  DateTime? date;
   String? orderId;
-  int? price;
-  String? productId;
   String? status;
-  Order({this.amount, this.orderId, this.price, this.productId, this.status});
+  String? note;
+  Order({this.address, this.customerId, this.date, this.orderId, this.status, this.note});
   static Order fromSnapshot(DocumentSnapshot snap) {
     final dynamic data = snap.data();
+    Timestamp now = data['date'];
+    DateTime getDate = now.toDate();
+    // var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(mls);// 31/12/2000, 22:00
     return Order(
-        amount: data['amount'],
+        address: data['address'],
+        customerId: data['orderId'],
+        date: getDate,
         orderId: data['orderId'],
-        price: data['price'],
-        productId: data['productId'],
+        note: data['note'],
         status: data['status']);
   }
 }

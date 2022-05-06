@@ -1,47 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:essays/values/app_assets.dart';
+import 'package:essays/models/product.dart';
+import 'package:essays/repository/product/product_repository.dart';
+import 'package:essays/views/1management/model/order_details.dart';
 import 'package:essays/views/1management/model/order.dart';
+import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
+import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
 
-class OrrderWaiting extends StatefulWidget {
-  const OrrderWaiting({Key? key}) : super(key: key);
+class OrderConfirmed extends StatefulWidget {
+  const OrderConfirmed({Key? key}) : super(key: key);
 
   @override
-  State<OrrderWaiting> createState() => _OrrderWaitingState();
+  State<OrderConfirmed> createState() => _OrderConfirmedState();
 }
 
-
-class _OrrderWaitingState extends State<OrrderWaiting> {
-  Stream<List<Order>> getAllOrders() async* {
-  yield* FirebaseFirestore.instance
-      .collection('orderDetails').where('status',isEqualTo: 'Chờ xác nhận')
-      .snapshots()
-      .map((snapshot) {
-    return snapshot.docs.map((doc) => Order.fromSnapshot(doc)).toList();
-  });
-}
-void getImageProduct() async{
-  
-}
-  List<Order> listOrder = [];
-
-  void returnListOrder() {
-    getAllOrders().listen((pros) async {
-      listOrder = pros;
-      setState(() {});
-    });
-  }
-
+class _OrderConfirmedState extends State<OrderConfirmed> {
+  final _orderRepo = OrderRepository();
+  final _productRepo = ProductRepository();
+  List<OrderDetails> _listOrderDetails = [];
+  List<Product> _listProduct = [];
   @override
   void initState() {
+    getAllProduct();
     returnListOrder();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('length1: ${listOrder.length}');
+    GlobalKey _key = GlobalKey();
+    print('length1: ${_listOrderDetails.length}');
     return SingleChildScrollView(
+      key: _key,
       physics: const ScrollPhysics(),
       child: Column(
         children: [
@@ -50,8 +39,8 @@ void getImageProduct() async{
             thickness: 15,
             color: Colors.grey[300],
           ),
-           Container(
-             alignment: Alignment.centerLeft,
+          Container(
+            alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
             child: const Text(
               'Chờ xác nhận',
@@ -64,8 +53,10 @@ void getImageProduct() async{
           ListView.builder(
             physics: const ScrollPhysics(),
             shrinkWrap: true,
-            itemCount: listOrder.length,
+            itemCount: _listOrderDetails.length,
             itemBuilder: (context, index) {
+              OrderDetails order = _listOrderDetails[index];
+
               return Column(
                 children: [
                   const Divider(
@@ -80,14 +71,15 @@ void getImageProduct() async{
                             vertical: 10, horizontal: 20),
                         width: 75,
                         height: 75,
-                        child: const Image(
-                            image: AssetImage(AppAssets.cheeseBurger)),
+                        child: Image(
+                            image: NetworkImage(
+                                getProductImage(order.productId!))),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Cheese Burger",
-                              style: TextStyle(
+                          Text(getProductName(order.productId!),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               )),
@@ -96,19 +88,21 @@ void getImageProduct() async{
                           ),
                           IntrinsicHeight(
                             child: Row(
-                              children: const [
-                                Text('Số lượng: 1',
-                                    style: TextStyle(
+                              children: [
+                                Text(order.amount.toString(),
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey)),
-                                VerticalDivider(
+                                const VerticalDivider(
                                   thickness: 2,
                                   indent: 2,
                                   endIndent: 2,
                                 ),
-                                Text('99.000 đ',
-                                    style: TextStyle(
+                                Text(
+                                    '${moneyFormat((order.amount! * order.price!)
+                                        .toString())!} đ',
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey))
@@ -164,22 +158,54 @@ void getImageProduct() async{
               );
             },
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height,
-              minHeight: 100,
-            ),
-            child: Container(
-              width: 1000,
-              height: 1000,
-              padding: const EdgeInsets.only(top: 20),
-              alignment: Alignment.topCenter,
-              color: Colors.grey[300],
-              child: const Text('Bạn đã xem hết danh sách'),
-            ),
+          Container(
+            
+            padding: const EdgeInsets.only(top: 20),
+            alignment: Alignment.topCenter,
+            color: Colors.grey[300],
+            child: const Text('Bạn đã xem hết danh sách'),
           )
         ],
       ),
     );
+  }
+
+  void returnListOrder() {
+    _orderRepo.getAllOrdersDetails().listen((pros) async {
+      _listOrderDetails = pros;
+      setState(() {});
+    });
+  }
+
+  void getAllProduct() async {
+    _listProduct = await _productRepo.getAllProduct2();
+    setState(() {});
+  }
+
+  String getProductImage(String productId) {
+    for (var e in _listProduct) {
+      if (e.productId == productId) {
+        return e.image;
+      }
+    }
+    return '';
+  }
+
+  String getProductName(String productId) {
+    for (var e in _listProduct) {
+      if (e.productId == productId) {
+        return e.productName;
+      }
+    }
+    return '';
+  }
+
+  int getProductPrice(String productId) {
+    for (var e in _listProduct) {
+      if (e.productId == productId) {
+        return e.price;
+      }
+    }
+    return 0;
   }
 }

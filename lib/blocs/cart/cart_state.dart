@@ -33,7 +33,6 @@ class LoadedCartState extends CartState {
     } else {
       return '0';
     }
-    return null;
   }
 }
 

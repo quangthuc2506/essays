@@ -727,15 +727,27 @@ class _CartScreenState extends State<CartScreen> {
                               final _firebaseFirestore =
                                   FirebaseFirestore.instance;
                               final _fireAuth = FirebaseAuth.instance;
+                              final _user = FirebaseAuth.instance.currentUser;
+                              String address = await _firebaseFirestore
+                                  .collection('user')
+                                  .where('email', isEqualTo: _user!.email)
+                                  .get()
+                                  .then((value) {
+                                return value.docs[0]['address'];
+                              });
                               //// them data vao bang bill
                               String id = createId();
                               Map<String, dynamic> map = {
                                 'orderId': id,
                                 'customerId': _fireAuth.currentUser!.email,
-                                'date': FieldValue.serverTimestamp()
+                                'date': FieldValue.serverTimestamp(),
+                                'address': address,
+                                'status':'Chờ xác nhận',
+                                'note': note
                               };
                               await _firebaseFirestore
-                                  .collection('order').doc(id)
+                                  .collection('order')
+                                  .doc(id)
                                   .set(map);
 
                               ////them data vao bang billDetails

@@ -37,6 +37,26 @@ class ProductRepository extends BaseProductRepository {
     return categoriesList1;
   }
 
+  Future<List<Product>> getProductList() async {
+    List<Product> productList = await _firebaseFirestore
+        .collection('category')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Product.fromSnapshot(doc)).toList();
+    }).first;
+    return productList;
+  }
+
+  Future<String> getImageProduct(String productId) async {
+    List<Product> productList = await getProductList();
+    for (var e in productList) {
+      if (e.productId == productId) {
+        return e.image;
+      }
+    }
+    return '';
+  }
+  
   getReview(Product product) async {
     _firebaseFirestore
         .collection('product')

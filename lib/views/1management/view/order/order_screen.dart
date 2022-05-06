@@ -1,5 +1,6 @@
 import 'package:essays/values/app_assets.dart';
-import 'package:essays/views/1management/order/order_waiting.dart';
+import 'package:essays/views/1management/view/order/order_confirmded.dart';
+import 'package:essays/views/1management/view/order/order_waiting.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -61,19 +62,17 @@ class OrderScreen extends StatelessWidget {
             ],
           ),
         ),
-        body:  TabBarView(
+        body:  const TabBarView(
           children: <Widget>[
-            OrrderWaiting(),
-            const Center(
-              child: Text("It's rainy here"),
-            ),
-            const Center(
+            OrderWaiting(),
+            OrderConfirmed(),
+            Center(
               child: Text("It's sunny here"),
             ),
-            const Center(
+            Center(
               child: Text("It's sunny here"),
             ),
-            const Center(
+            Center(
               child: Text("It's sunny here"),
             ),
           ],
