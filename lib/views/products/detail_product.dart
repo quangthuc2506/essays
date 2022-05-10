@@ -22,7 +22,6 @@ class _DetailProductScreenState extends State<DetailProductScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialIndex);

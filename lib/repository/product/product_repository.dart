@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/models/category.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/base_product_repository.dart';
+import 'package:essays/views/1management/model/table_reserve.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -24,6 +25,18 @@ class ProductRepository extends BaseProductRepository {
       }).toList();
     });
   }
+
+  // Stream<List<DinnerTable>> getAllTable(String tableId) async* {
+  //   yield* _firebaseFirestore
+  //       .collection('table')
+  //       .where('tableId', isEqualTo: tableId)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     return snapshot.docs.map((doc) {
+  //       return DinnerTable.fromSnapshot(doc);
+  //     }).toList();
+  //   });
+  // }
 
   List<Category>? categoriesList;
   Future<List<Category>> getCategoriesList() async {
@@ -56,7 +69,24 @@ class ProductRepository extends BaseProductRepository {
     }
     return '';
   }
-  
+
+  Future<Product> getProductByProductId({required String productId}) async {
+    List<Product> productList = await getProductList();
+    for (var e in productList) {
+      if (e.productId == productId) {
+        return e;
+      }
+    }
+    return Product(
+        categoryId: '',
+        productId: '',
+        productName: '',
+        details: '',
+        image: '',
+        price: 0,
+        review: '');
+  }
+
   getReview(Product product) async {
     _firebaseFirestore
         .collection('product')
@@ -188,6 +218,26 @@ class ProductRepository extends BaseProductRepository {
       }
     }
     return filteredList;
+  }
+
+  Future<List<DinnerTable>> getAllTable({required String tableId}) async {
+    List<DinnerTable> list = await _firebaseFirestore
+        .collection('table')
+        .where('tableId', isEqualTo: tableId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return DinnerTable.fromSnapshot(doc);
+      }).toList();
+    }).first;
+
+    List<DinnerTable> filteredList1 = [];
+
+    for (DinnerTable item in list) {
+      filteredList1.add(item);
+    }
+
+    return filteredList1;
   }
 
   Future<List<Product>> getProductsByCategoryId({String? value}) async {

@@ -31,17 +31,19 @@ class TableScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const DetailsTableScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsTableScreen(index: index+1,)));
                   },
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.table_bar,size: 30,
+                      Container(
+                        width: 75,
+                        height: 75,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          AppAssets.table_reserve
                         ),
                       ),
-                      Text("Bàn ${index + 1}"),
+                      Text("Bàn ${index + 1}", style: const TextStyle(fontWeight: FontWeight.w600),),
                     ],
                   ),
                 );

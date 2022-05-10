@@ -42,4 +42,13 @@ class AppAssets {
   static const dessertIcon = imagePath + 'dessertIcon.png';
   static const giftIcon = imagePath + 'giftIcon.png';
   static const backgroundAppbar = imagePath + 'backgroundAppbar.jpg';
+  static const doanhThuIcon = imagePath + 'doanh_thu_icon1.png';
+  static const nhatKyIcon = imagePath + 'nhat_ky_icon1.png';
+  static const taoDonVaGiaoHangIcon =
+      imagePath + 'tao_don_va_giao_hang_icon1.png';
+  static const themSanPham = imagePath + 'them_san_pham1.png';
+  static const tableIcon = imagePath + 'table_icon.png';
+  static const khoIcon = imagePath + 'kho_icon.png';
+  static const nhanvienIcon = imagePath + 'nhan_vien_icon.png';
+  static const table_reserve = imagePath + 'table_reserve.png';
 }

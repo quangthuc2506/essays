@@ -1,11 +1,70 @@
+import 'package:essays/models/product.dart';
+import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/values/app_assets.dart';
+import 'package:essays/views/1management/model/table_reserve.dart';
+import 'package:essays/views/1management/view/reserve/Add_to_table.dart';
+import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
 
-class DetailsTableScreen extends StatelessWidget {
-  const DetailsTableScreen({Key? key}) : super(key: key);
+class DetailsTableScreen extends StatefulWidget {
+  int index;
+  DetailsTableScreen({Key? key, required this.index}) : super(key: key);
+
+  @override
+  State<DetailsTableScreen> createState() => _DetailsTableScreenState();
+}
+
+class _DetailsTableScreenState extends State<DetailsTableScreen> {
+  final ProductRepository _productRepository = ProductRepository();
+  List<DinnerTable> listTable = [];
+  List<Product> products = [];
+  int total = 0;
+
+  void getTables() async {
+    listTable = await _productRepository.getAllTable(
+        tableId: (widget.index).toString());
+    setState(() {});
+  }
+
+  void getAllProduct() {
+    _productRepository.getAllProduct().listen((pros) async {
+      products = pros;
+      setState(() {});
+    });
+  }
+
+  getTotal() {
+    total = 0;
+    for (DinnerTable d in listTable) {
+      Product product = Product(
+          categoryId: '',
+          productId: '',
+          productName: '',
+          details: '',
+          image: '',
+          price: 0,
+          review: '');
+      for (Product p in products) {
+        if (p.productId == d.productId) {
+          product = p;
+        }
+      }
+      total += d.amount! * product.price;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getTables();
+    getAllProduct();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    getTotal();
+    print(('index: ${listTable.length}'));
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: const Image(
@@ -14,11 +73,14 @@ class DetailsTableScreen extends StatelessWidget {
           alignment: Alignment.topCenter,
         ),
         leading: InkWell(
-          onTap: (){
-            Navigator.pop(context);
-          },
-          child: const Icon(Icons.arrow_back,color: Colors.white,)),
-        title: const Text("Bàn 1"),
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        title: Text("Bàn ${widget.index}"),
         centerTitle: true,
         elevation: 0,
       ),
@@ -27,31 +89,62 @@ class DetailsTableScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text("Trạng thái: đang phục vụ"),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10),
+              child: Text(
+                listTable.isEmpty
+                    ? "Bàn đang trống"
+                    : "Trạng thái: đang phục vụ",
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10,right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Danh sách các món đang phục phụ'),
+                  const Text('Danh sách các món đang phục phụ:',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                   ElevatedButton(
-                      onPressed: () {}, child: const Text('Thêm món'),
-                      style: ElevatedButton.styleFrom(
-                    primary: const Color(0xff3AC5C8),
-                    onPrimary: Colors.white,
-                    elevation: 0,),
-                      )
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddToTableScreen(
+                                    indexTable: widget.index,
+                                  )));
+                    },
+                    child: const Text('Thêm món'),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xff3AC5C8),
+                      onPrimary: Colors.white,
+                      elevation: 0,
+                    ),
+                  )
                 ],
               ),
             ),
             ListView.builder(
-              itemCount: 4,
+              itemCount: listTable.length,
               shrinkWrap: true,
               physics: const ScrollPhysics(),
               itemBuilder: (context, index) {
+                Product product123 = Product(
+                    categoryId: '',
+                    productId: '',
+                    productName: '',
+                    details: '',
+                    image: '',
+                    price: 0,
+                    review: '');
+
+                for (Product p in products) {
+                  if (p.productId == listTable[index].productId) {
+                    product123 = p;
+                  }
+                }
                 return Card(
                   margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
                   child: Row(
@@ -63,17 +156,20 @@ class DetailsTableScreen extends StatelessWidget {
                               vertical: 5, horizontal: 10),
                           height: 75,
                           width: 75,
-                          child: const Image(
-                              image: AssetImage(AppAssets.cheeseBurger)),
+                          child: product123.image.isEmpty
+                              ? const Icon(Icons.image)
+                              : Image(image: NetworkImage(product123.image)),
                         ),
-                        const Text('Cheese Burger'),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: Text(product123.productName,overflow: TextOverflow.ellipsis,),
+                        ),
                       ]),
-                      Row(children: const [
-                        Text('7'),
-                        
+                      Row(children: [
+                        Text(listTable[index].amount.toString()),
                         Padding(
-                          padding: EdgeInsets.only(left: 20, right: 10),
-                          child: Text('400.000 đ'),
+                          padding: const EdgeInsets.only(left: 20, right: 10),
+                          child: Text(product123.price.toString()),
                         )
                       ]),
                     ],
@@ -81,12 +177,19 @@ class DetailsTableScreen extends StatelessWidget {
                 );
               },
             ),
-            Container(alignment: Alignment.center, child: const Text('Tổng cộng: 2400000đ')),
+            Container(
+                padding: const EdgeInsets.only(top: 25),
+                alignment: Alignment.center,
+                child: Text('Tổng cộng: ${moneyFormat(total.toString())} đ',
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black))),
           ],
         ),
       ),
       bottomSheet: Container(
-        height: 65,
+        height: 95,
         alignment: Alignment.center,
         child: Column(
           children: [
@@ -96,14 +199,16 @@ class DetailsTableScreen extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
+              height: 60,
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: ElevatedButton(
                 onPressed: () {},
-                child: const Text('Thạnh toán'),
+                child: const Text('Thanh toán'),
                 style: ElevatedButton.styleFrom(
-                    primary: const Color(0xff3AC5C8),
-                    onPrimary: Colors.white,
-                    elevation: 0,),
+                  primary: const Color(0xff3AC5C8),
+                  onPrimary: Colors.white,
+                  elevation: 0,
+                ),
               ),
             ),
             const Divider(

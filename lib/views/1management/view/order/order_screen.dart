@@ -23,7 +23,7 @@ class OrderScreen extends StatelessWidget {
           elevation: 0,
           bottom: const TabBar(
             isScrollable: true,
-            tabs: <Widget>[
+            tabs: [
               Tab(
                 icon: Text(
                   'Chờ xác nhận',

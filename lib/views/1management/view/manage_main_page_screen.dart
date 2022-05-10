@@ -1,15 +1,12 @@
 import 'package:essays/views/1management/view/manage_home_page_screen.dart';
-import 'package:essays/views/1management/view/order/order_screen.dart';
+import 'package:essays/views/1management/view/overview/overview_Screen.dart';
 import 'package:essays/views/1management/view/product/management_product_screen.dart';
 import 'package:essays/views/1management/view/reserve/table_screen.dart';
-import 'package:essays/views/home_screen/home_screen.dart';
-import 'package:essays/views/personal/personal_screen.dart';
-import 'package:essays/views/reserve/reserve_screen.dart';
 import 'package:flutter/material.dart';
 
 class ManageMainPageScreen extends StatefulWidget {
   ManageMainPageScreen({Key? key, required this.currentIndex});
-  int currentIndex = 0;
+  int currentIndex = 1;
   @override
   State<ManageMainPageScreen> createState() => _ManageMainPageScreenState();
 }
@@ -17,9 +14,9 @@ class ManageMainPageScreen extends StatefulWidget {
 class _ManageMainPageScreenState extends State<ManageMainPageScreen> {
   final screens = [
     ManageHomeScreen(),
-      const TableScreen(),
+    const TableScreen(),
     const ProductsManagementScreen(),
-    const PersonalScreen()
+    const OverviewScreen()
   ];
   @override
   Widget build(BuildContext context) {

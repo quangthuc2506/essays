@@ -2,7 +2,6 @@ import 'package:essays/views/1management/model/menu_model.dart';
 import 'package:flutter/material.dart';
 
 class ManageHomeScreen extends StatelessWidget {
-  
   ManageHomeScreen({Key? key}) : super(key: key);
   final GlobalKey _key = GlobalKey();
   double width = 0;
@@ -11,10 +10,8 @@ class ManageHomeScreen extends StatelessWidget {
     width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          
           flexibleSpace: Container(),
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -153,13 +150,13 @@ class ManageHomeScreen extends StatelessWidget {
                           Container(
                             width: 50,
                             height: 50,
-                            child: Icon(
-                              menuList[index].icon,
-                              color: Colors.white,
-                            ),
                             decoration: BoxDecoration(
                                 color: menuList[index].color,
                                 borderRadius: BorderRadius.circular(50)),
+                                child:  Center(child: SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: menuList[index].icon)),
                           ),
                           SizedBox(
                             width: 50,

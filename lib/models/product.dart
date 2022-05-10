@@ -25,17 +25,18 @@ class Product {
       this.sale,
       this.categoryname});
   static Product fromSnapshot(DocumentSnapshot snap) {
+     final dynamic data = snap.data();
     Product product = Product(
-        categoryId: snap['categoryId'],
-        productId: snap['productId'],
-        productName: snap['productName'],
-        details: snap['details'],
-        image: snap['image'],
-        price: snap['price'],
-        review: snap['review'],
-        amount: snap['amount'],
-        cost: snap['cost'],
-        sale: snap['sale']);
+        categoryId: data['categoryId'],
+        productId: data['productId'],
+        productName: data['productName'],
+        details: data['details'],
+        image: data['image'],
+        price: data['price'],
+        review: data['review'],
+        amount: data['amount'],
+        cost: data['cost'],
+        sale: data['sale']);
     return product;
   }
 
