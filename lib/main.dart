@@ -6,7 +6,6 @@ import 'package:essays/repository/auth/auth_repository.dart';
 import 'package:essays/repository/cart/cart_repository.dart';
 import 'package:essays/repository/category/category_repository.dart';
 import 'package:essays/repository/product/product_repository.dart';
-import 'package:essays/views/1management/view/manage_main_page_screen.dart';
 import 'package:essays/views/intro_login_signup_screen/login2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,9 +54,7 @@ class MyApp extends StatelessWidget {
                   context
                       .read<AuthBloc>()
                       .add(CheckedSignInEvent(email: snapshot.data!.email));
-                  return ManageMainPageScreen(
-                    currentIndex: 1,
-                  );
+                  return Login2Screen();
                 }
                 return Login2Screen();
               },

@@ -1,5 +1,6 @@
 import 'package:essays/blocs/auth/auth_bloc.dart';
 import 'package:essays/values/app_assets.dart';
+import 'package:essays/views/1management/view/manage_main_page_screen.dart';
 import 'package:essays/views/intro_login_signup_screen/sign_up_screen.dart';
 import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/widgets/button_black_green.dart';
@@ -20,14 +21,39 @@ class Login2Screen extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
+            print('================');
+            print(state.userMap['position']);
+            String s = state.userMap['position'];
+            if (s == 'Chủ') {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ManageMainPageScreen(
+                            currentIndex: 0,
+                          )));
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MainPageScreen(
+                          currentIndex: 0,
+                        )));
+            }
             
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => MainPageScreen(currentIndex: 0,)));
           }
+
           if (state is AuthError) {
+            if (_emailController.text.isEmpty ||
+                _passwordController.text.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Vui lòng nhập đầy đủ thông tin')));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(
+                      'Thông tin đăng nhập không chính xác, vui lòng thử lại!')));
+            }
             // Showing the error message if the user has entered invalid credentials
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+
           }
         },
         child: Container(

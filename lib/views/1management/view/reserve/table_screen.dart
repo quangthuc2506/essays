@@ -67,7 +67,9 @@ class _TableScreenState extends State<TableScreen> {
                                 width: 75,
                                 height: 75,
                                 padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(AppAssets.table_reserve),
+                                child: 
+                                s.status =='đang trống' ? Image.asset(AppAssets.table_disable_icon):
+                                Image.asset(AppAssets.table_reserve),
                               ),
                               Text(
                                 "Bàn ${map['tableId']}",

@@ -4,14 +4,14 @@ import 'package:essays/views/1management/model/order.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
 import 'package:flutter/material.dart';
 
-class OrderWaiting extends StatefulWidget {
-  const OrderWaiting({Key? key}) : super(key: key);
+class OrderWaitingScreen extends StatefulWidget {
+  const OrderWaitingScreen({Key? key}) : super(key: key);
 
   @override
-  State<OrderWaiting> createState() => _OrderWaitingState();
+  State<OrderWaitingScreen> createState() => _OrderWaitingScreenState();
 }
 
-class _OrderWaitingState extends State<OrderWaiting> {
+class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
   final _orderRepo = OrderRepository();
   final _productRepo = ProductRepository();
   List<Order> _listOrder = [];

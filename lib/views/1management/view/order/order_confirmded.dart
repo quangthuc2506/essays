@@ -1,7 +1,6 @@
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/views/1management/model/order_details.dart';
-import 'package:essays/views/1management/model/order.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
 import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';

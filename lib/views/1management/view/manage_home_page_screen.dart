@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/1management/model/menu_model.dart';
 import 'package:essays/views/1management/model/order.dart';
 import 'package:essays/views/1management/model/order_details.dart';
+import 'package:essays/views/1management/view/order/order_screen.dart';
+import 'package:essays/views/1management/view/reserve/table_screen.dart';
+import 'package:essays/views/1management/view/staff/management_staff.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
 import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
@@ -27,18 +31,16 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
     super.initState();
   }
 
-
   void getAllOrders() async {
     _listOrder = await _orderRepo.getOrders2();
     print('--- ${_listOrder.length}');
     for (Order o in _listOrder) {
-      
       if (o.address == 'tại quán') {
         _donTaiban++;
       } else {
         _donOnline++;
       }
-      if(o.status=='Chờ xác nhận'){
+      if (o.status == 'Chờ xác nhận') {
         _chuaXanNhan++;
       }
     }
@@ -67,8 +69,8 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
           padding: EdgeInsets.only(top: AppBar().preferredSize.height),
           decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                    'https://c4.wallpaperflare.com/wallpaper/481/286/360/blue-curves-abstract-background-wallpaper-preview.jpg',
+                  image: AssetImage(
+                    AppAssets.backgroundAppbar,
                   ),
                   alignment: Alignment.topCenter)),
           child: SingleChildScrollView(
@@ -83,13 +85,10 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.data != null) {
-                        print('=================');
                         for (dynamic o in snapshot.data!.docs) {
                           Map<String, dynamic> map =
                               o.data() as Map<String, dynamic>;
                           OrderDetails s = OrderDetails.fromSnapshot(o);
-                          print('==========================');
-                          print(s.price);
                           turnover += s.price!;
                         }
                       }
@@ -110,7 +109,7 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
-                                    'DOANH THU NGÀY',
+                                    'DOANH THU',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
@@ -211,32 +210,97 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                             childAspectRatio: 0.8,
                             crossAxisCount: 4),
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: menuList[index].color,
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Center(
-                                child: SizedBox(
-                                    height: 25,
-                                    width: 25,
-                                    child: menuList[index].icon)),
-                          ),
-                          SizedBox(
-                            width: 50,
-                            child: Text(
-                              menuList[index].content,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
+                      return InkWell(
+                        onTap: () {
+                          switch (menuList[index].id) {
+                            case 1:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OrderScreen(
+                                            initial: 0,
+                                          )));
+                              break;
+                            case 2:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            case 3:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            case 4:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            case 5:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const StaffManagementScreen()));
+                              break;
+                            case 6:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            case 7:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            case 8:
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TableScreen()));
+                              break;
+                            default:
+                              break;
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: menuList[index].color,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Center(
+                                  child: SizedBox(
+                                      height: 25,
+                                      width: 25,
+                                      child: menuList[index].icon)),
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              width: 50,
+                              child: Text(
+                                menuList[index].content,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -246,8 +310,7 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                       left: 10, right: 10, top: 5, bottom: 10),
                   width: width,
                   child: const Image(
-                    image: NetworkImage(
-                        'https://blog.gosell.vn/wp-content/uploads/2020/05/banner_news-01.png'),
+                    image: AssetImage(AppAssets.banner123),
                     fit: BoxFit.fitWidth,
                   ),
                 ),

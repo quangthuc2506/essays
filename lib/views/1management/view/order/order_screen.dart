@@ -4,12 +4,15 @@ import 'package:essays/views/1management/view/order/order_waiting.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
-  const OrderScreen({Key? key}) : super(key: key);
+  int? initial;
+
+  OrderScreen({Key? key, this.initial}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    initial ??= 0;
     return DefaultTabController(
-      initialIndex: 0,
+      initialIndex: initial!,
       length: 5,
       child: Scaffold(
         appBar: AppBar(
@@ -62,9 +65,9 @@ class OrderScreen extends StatelessWidget {
             ],
           ),
         ),
-        body:  const TabBarView(
+        body: const TabBarView(
           children: <Widget>[
-            OrderWaiting(),
+            OrderWaitingScreen(),
             OrderConfirmed(),
             Center(
               child: Text("It's sunny here"),

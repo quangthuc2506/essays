@@ -32,7 +32,7 @@ class AuthRepository extends BaseAuthRepository {
         'phoneNumber': phoneNumber,
         'password': password,
         'point': '0',
-        'position':''
+        'position': ''
       });
     } on PlatformException {}
   }
@@ -60,16 +60,19 @@ class AuthRepository extends BaseAuthRepository {
 
       await FirebaseAuth.instance.signInWithCredential(credential);
       final _user = FirebaseAuth.instance.currentUser;
-      await _firestore.collection('user').doc(_user!.uid).set({
-        'name': _user.displayName,
-        'email': _user.email,
-        'avatar': _user.photoURL,
-        'phoneNumber': '',
-        'password': '',
-        'point': '0',
-        'address':'',
-        'position':''
-      });
+      final check = await _firestore.collection('user').doc(_user!.uid).get();
+      if (!check.exists) {
+        await _firestore.collection('user').doc(_user.uid).set({
+          'name': _user.displayName,
+          'email': _user.email,
+          'avatar': _user.photoURL,
+          'phoneNumber': '',
+          'password': '',
+          'point': '0',
+          'address': '',
+          'position': ''
+        });
+      }
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -132,7 +135,8 @@ class AuthRepository extends BaseAuthRepository {
         .doc(_user!.uid)
         .update({'phoneNumber': phoneNumber});
   }
-@override
+
+  @override
   Future<void> updateAddress({String? address}) async {
     final _user = FirebaseAuth.instance.currentUser;
     await _firestore

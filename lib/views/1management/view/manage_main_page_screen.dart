@@ -13,7 +13,7 @@ class ManageMainPageScreen extends StatefulWidget {
 
 class _ManageMainPageScreenState extends State<ManageMainPageScreen> {
   final screens = [
-    ManageHomeScreen(),
+    const ManageHomeScreen(),
     const TableScreen(),
     const ProductsManagementScreen(),
     const OverviewScreen()
@@ -35,9 +35,9 @@ class _ManageMainPageScreenState extends State<ManageMainPageScreen> {
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined), label: 'Trang chủ'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Menu'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Bàn'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.table_bar), label: 'Kho/ sản phẩm'),
+                icon: Icon(Icons.table_bar), label: 'Kho/sản phẩm'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person), label: 'Tài khoản'),
           ],
