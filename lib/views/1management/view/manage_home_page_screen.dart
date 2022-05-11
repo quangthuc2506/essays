@@ -1,12 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/views/1management/model/menu_model.dart';
+import 'package:essays/views/1management/model/order.dart';
+import 'package:essays/views/1management/model/order_details.dart';
+import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
+import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
 
-class ManageHomeScreen extends StatelessWidget {
-  ManageHomeScreen({Key? key}) : super(key: key);
+class ManageHomeScreen extends StatefulWidget {
+  const ManageHomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ManageHomeScreen> createState() => _ManageHomeScreenState();
+}
+
+class _ManageHomeScreenState extends State<ManageHomeScreen> {
   final GlobalKey _key = GlobalKey();
   double width = 0;
+  List<Order> _listOrder = [];
+  int _chuaXanNhan = 0;
+  int _donOnline = 0;
+  int _donTaiban = 0;
+  final _orderRepo = OrderRepository();
+  @override
+  void initState() {
+    getAllOrders();
+    super.initState();
+  }
+
+
+  void getAllOrders() async {
+    _listOrder = await _orderRepo.getOrders2();
+    print('--- ${_listOrder.length}');
+    for (Order o in _listOrder) {
+      
+      if (o.address == 'tại quán') {
+        _donTaiban++;
+      } else {
+        _donOnline++;
+      }
+      if(o.status=='Chờ xác nhận'){
+        _chuaXanNhan++;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    int turnover = 0;
+
+    print('online: ${_listOrder.length}');
+    print('tai ban: $_donTaiban');
+
     width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
@@ -32,105 +76,127 @@ class ManageHomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  elevation: 10,
-                  margin: const EdgeInsets.only(left: 15, right: 15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'DOANH THU NGÀY',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey),
-                            ),
-                            Row(
-                              children: const [
-                                Text(
-                                  'Xem chi tiết',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.blue),
-                                ),
-                                Icon(
-                                  Icons.keyboard_arrow_right_rounded,
-                                  color: Colors.blue,
-                                ),
-                              ],
-                            )
-                          ],
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('orderDetails')
+                        .where('status', isEqualTo: 'Đã giao')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        print('=================');
+                        for (dynamic o in snapshot.data!.docs) {
+                          Map<String, dynamic> map =
+                              o.data() as Map<String, dynamic>;
+                          OrderDetails s = OrderDetails.fromSnapshot(o);
+                          print('==========================');
+                          print(s.price);
+                          turnover += s.price!;
+                        }
+                      }
+
+                      return Card(
+                        elevation: 10,
+                        margin: const EdgeInsets.only(left: 15, right: 15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'DOANH THU NGÀY',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey),
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text(
+                                        'Xem chi tiết',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.blue),
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_right_rounded,
+                                        color: Colors.blue,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Text(moneyFormat(turnover.toString())!,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700)),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: Divider(),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Đơn online',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey),
+                                      ),
+                                      Text(_donOnline.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700))
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Đơn tại bàn',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey),
+                                      ),
+                                      Text(_donTaiban.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700))
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Đơn mới',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey),
+                                      ),
+                                      Text(_chuaXanNhan.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700))
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                        const Text('0',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.w700)),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Divider(),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: const [
-                                Text(
-                                  'Đơn online',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey),
-                                ),
-                                Text('0',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700))
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Text(
-                                  'Đơn tại bàn',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey),
-                                ),
-                                Text('0',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700))
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Text(
-                                  'Đơn mới',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey),
-                                ),
-                                Text('0',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700))
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                      );
+                    }),
                 Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 10),
                   color: Colors.white,
@@ -153,10 +219,11 @@ class ManageHomeScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: menuList[index].color,
                                 borderRadius: BorderRadius.circular(50)),
-                                child:  Center(child: SizedBox(
-                                  height: 25,
-                                  width: 25,
-                                  child: menuList[index].icon)),
+                            child: Center(
+                                child: SizedBox(
+                                    height: 25,
+                                    width: 25,
+                                    child: menuList[index].icon)),
                           ),
                           SizedBox(
                             width: 50,

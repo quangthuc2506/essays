@@ -5,6 +5,7 @@ import 'package:essays/models/cart.dart';
 import 'package:essays/views/coupon/coupon_screen.dart';
 import 'package:essays/views/main_page_screen.dart';
 import 'package:essays/views/personal/change_infor.dart';
+import 'package:essays/widgets/create_id.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -735,6 +736,14 @@ class _CartScreenState extends State<CartScreen> {
                                   .then((value) {
                                 return value.docs[0]['address'];
                               });
+                              if (address.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Vui lòng thêm địa chỉ nhận hàng!'),
+                                  ),
+                                );
+                                return;
+                              }
                               //// them data vao bang bill
                               String id = createId();
                               Map<String, dynamic> map = {
@@ -742,8 +751,8 @@ class _CartScreenState extends State<CartScreen> {
                                 'customerId': _fireAuth.currentUser!.email,
                                 'date': FieldValue.serverTimestamp(),
                                 'address': address,
-                                'status':'Chờ xác nhận',
-                                'note': note
+                                'status': 'Chờ xác nhận',
+                                'note': note,
                               };
                               await _firebaseFirestore
                                   .collection('order')
@@ -777,6 +786,11 @@ class _CartScreenState extends State<CartScreen> {
                                 }
                                 return batch.commit();
                               }).then((value) => null);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Đã đặt hàng'),
+                                ),
+                              );
                             }
                       : null,
                   child: state is LoadedCartState
@@ -796,15 +810,5 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
-  }
-
-  String createId() {
-    String id = DateTime.now().day.toString() +
-        DateTime.now().hour.toString() +
-        DateTime.now().minute.toString() +
-        DateTime.now().second.toString() +
-        DateTime.now().millisecond.toString() +
-        DateTime.now().microsecond.toString();
-    return id;
   }
 }

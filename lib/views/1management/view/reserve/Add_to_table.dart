@@ -283,8 +283,7 @@ class _AddToTableScreenState extends State<AddToTableScreen> {
                                                           Map<String, dynamic>
                                                               map = {
                                                             'tableId': widget
-                                                                .indexTable
-                                                                .toString(),
+                                                                .indexTable,
                                                             'productId': product
                                                                 .productId,
                                                             'amount': int.parse(
@@ -294,7 +293,7 @@ class _AddToTableScreenState extends State<AddToTableScreen> {
                                                           await FirebaseFirestore
                                                               .instance
                                                               .collection(
-                                                                  'table')
+                                                                  'tableNow')
                                                               .add(
                                                                 map,
                                                               );

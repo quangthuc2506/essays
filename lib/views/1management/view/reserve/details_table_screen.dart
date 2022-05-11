@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/1management/model/table_reserve.dart';
 import 'package:essays/views/1management/view/reserve/Add_to_table.dart';
 import 'package:essays/views/products/moneyFormat.dart';
+import 'package:essays/widgets/create_id.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DetailsTableScreen extends StatefulWidget {
@@ -22,7 +25,7 @@ class _DetailsTableScreenState extends State<DetailsTableScreen> {
 
   void getTables() async {
     listTable = await _productRepository.getAllTable(
-        tableId: (widget.index).toString());
+        tableId: (widget.index));
     setState(() {});
   }
 
@@ -161,8 +164,11 @@ class _DetailsTableScreenState extends State<DetailsTableScreen> {
                               : Image(image: NetworkImage(product123.image)),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
-                          child: Text(product123.productName,overflow: TextOverflow.ellipsis,),
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Text(
+                            product123.productName,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ]),
                       Row(children: [
@@ -202,7 +208,55 @@ class _DetailsTableScreenState extends State<DetailsTableScreen> {
               height: 60,
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final _firebaseFirestore = FirebaseFirestore.instance;
+                  //// them data vao bang bill
+                  String id = createId();
+                  Map<String, dynamic> map = {
+                    'orderId': id,
+                    'customerId': FirebaseAuth.instance.currentUser!.email,
+                    'date': FieldValue.serverTimestamp(),
+                    'address': 'tại quán',
+                    'status': 'Đã giao',
+                    'note': 'tại quán',
+                  };
+                  await _firebaseFirestore.collection('order').doc(id).set(map);
+
+                  ////them data vao bang billDetails
+                  for (DinnerTable e in listTable) {
+                    Product p = await _productRepository.getProductByProductId(
+                        productId: e.productId!);
+                    Map<String, dynamic> map1 = {
+                      'orderId': id,
+                      'amount': e.amount,
+                      'price': p.price,
+                      'productId': p.productId,
+                      'status': 'Đã giao'
+                    };
+                    await _firebaseFirestore
+                        .collection('orderDetails')
+                        .add(map1);
+
+                    ////xoá những sản phẩm đã đặt khỏi bàn
+                    await _firebaseFirestore
+                        .collection('tableNow')
+                        .where('productId', isEqualTo: p.productId)
+                        .get()
+                        .then((querySnapshot) {
+                      var batch = _firebaseFirestore.batch();
+                      for (var element in querySnapshot.docs) {
+                        batch.delete(element.reference);
+                      }
+                      return batch.commit();
+                    }).then((value) => null);
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Đã thanh toán'),
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
                 child: const Text('Thanh toán'),
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xff3AC5C8),

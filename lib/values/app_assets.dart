@@ -50,5 +50,6 @@ class AppAssets {
   static const tableIcon = imagePath + 'table_icon.png';
   static const khoIcon = imagePath + 'kho_icon.png';
   static const nhanvienIcon = imagePath + 'nhan_vien_icon.png';
+  static const reservedIcon = imagePath + 'reserved_icon.png';
   static const table_reserve = imagePath + 'table_reserve.png';
 }

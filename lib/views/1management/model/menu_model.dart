@@ -30,8 +30,8 @@ List<MenuModel> menuList = [
       content: 'Quản lý nhân viên',
       color: const Color(0xff13D187)),
   MenuModel(
-      icon: Image.asset(AppAssets.khoIcon),
-      content: 'Quản lý kho',
+      icon: Image.asset(AppAssets.reservedIcon),
+      content: 'Quản lý đơn đặt bàn',
       color: const Color(0xff299BFE)),
   MenuModel(
       icon: Image.asset(AppAssets.doanhThuIcon),

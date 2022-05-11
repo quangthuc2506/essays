@@ -52,7 +52,7 @@ class ProductRepository extends BaseProductRepository {
 
   Future<List<Product>> getProductList() async {
     List<Product> productList = await _firebaseFirestore
-        .collection('category')
+        .collection('product')
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => Product.fromSnapshot(doc)).toList();
@@ -220,9 +220,9 @@ class ProductRepository extends BaseProductRepository {
     return filteredList;
   }
 
-  Future<List<DinnerTable>> getAllTable({required String tableId}) async {
+  Future<List<DinnerTable>> getAllTable({required int tableId}) async {
     List<DinnerTable> list = await _firebaseFirestore
-        .collection('table')
+        .collection('tableNow')
         .where('tableId', isEqualTo: tableId)
         .snapshots()
         .map((snapshot) {
