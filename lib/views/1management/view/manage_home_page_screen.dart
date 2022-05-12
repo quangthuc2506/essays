@@ -3,12 +3,15 @@ import 'package:essays/values/app_assets.dart';
 import 'package:essays/views/1management/model/menu_model.dart';
 import 'package:essays/views/1management/model/order.dart';
 import 'package:essays/views/1management/model/order_details.dart';
+import 'package:essays/views/1management/view/manage_main_page_screen.dart';
 import 'package:essays/views/1management/view/order/order_screen.dart';
+import 'package:essays/views/1management/view/product/add_new_product.dart';
 import 'package:essays/views/1management/view/reserve/table_screen.dart';
 import 'package:essays/views/1management/view/staff/management_staff.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
 import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ManageHomeScreen extends StatefulWidget {
   const ManageHomeScreen({Key? key}) : super(key: key);
@@ -58,11 +61,14 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Color(0xff299BFE),
+          ),
           flexibleSpace: Container(),
           elevation: 0,
           backgroundColor: Colors.transparent,
           title: const Text('Tổng quan'),
-          leading: const Icon(Icons.home),
+          leading: const Icon(Icons.home, color: Colors.white,),
           centerTitle: true,
         ),
         body: Container(
@@ -233,14 +239,16 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const TableScreen()));
+                                          ManageMainPageScreen(
+                                            currentIndex: 2,
+                                          )));
                               break;
                             case 4:
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const TableScreen()));
+                                          const AddNewProductScreen()));
                               break;
                             case 5:
                               Navigator.push(
@@ -261,14 +269,18 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const TableScreen()));
+                                          ManageMainPageScreen(
+                                            currentIndex: 3,
+                                          )));
                               break;
                             case 8:
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const TableScreen()));
+                                          ManageMainPageScreen(
+                                            currentIndex: 3,
+                                          )));
                               break;
                             default:
                               break;
@@ -327,6 +339,13 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                   child: Column(
                     children: [
                       ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const StaffManagementScreen()));
+                        },
                         leading: const Icon(
                           Icons.fact_check_rounded,
                           color: Color(0xff299BFE),
@@ -343,6 +362,14 @@ class _ManageHomeScreenState extends State<ManageHomeScreen> {
                         endIndent: 15,
                       ),
                       ListTile(
+                        onTap: (){
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OrderScreen(
+                                            initial: 0,
+                                          )));
+                        },
                         leading: const Icon(
                           Icons.fact_check_rounded,
                           color: Color(0xff299BFE),

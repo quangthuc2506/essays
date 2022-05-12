@@ -21,6 +21,7 @@ class OrderScreen extends StatelessWidget {
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
           ),
+          leading: const Icon(Icons.arrow_back,color: Colors.white,),
           title: const Text("Danh sách đơn hàng"),
           centerTitle: true,
           elevation: 0,

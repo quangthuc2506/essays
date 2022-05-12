@@ -107,7 +107,7 @@ class Login2Screen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Login",
+                        "Đăng nhập",
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 36,
@@ -124,13 +124,13 @@ class Login2Screen extends StatelessWidget {
                       textFormFieldLogin(
                           controller: _passwordController,
                           prefixIcon: Icons.lock_open_outlined,
-                          labelText: "Password",
+                          labelText: "Mật khẩu",
                           observe: true,
                           suffixIcon: Icons.visibility,
                           onChanged: (obs) {}),
                       const Align(
                           alignment: Alignment.centerRight,
-                          child: Text("Forgot password?")),
+                          child: Text("Quên mật khẩu?")),
                       const SizedBox(
                         height: 16,
                       ),
@@ -140,7 +140,7 @@ class Login2Screen extends StatelessWidget {
                         },
                         icon: const Image(
                             image: AssetImage(AppAssets.logoGoogle)),
-                        label: const Text("Login with Google"),
+                        label: const Text("Đăng nhập với Google"),
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(5),
                             fixedSize: const Size(234, 43),
@@ -154,7 +154,7 @@ class Login2Screen extends StatelessWidget {
                         height: 16,
                       ),
                       ButtonBlackGreen(
-                          text: "Login",
+                          text: "Đăng nhập",
                           onPressed: () {
                             _authenticateWithEmailAndPassword(context);
                           }),
@@ -164,7 +164,7 @@ class Login2Screen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Don't have any account? "),
+                          const Text("Bạn chưa có tài khoản? "),
                           GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -174,7 +174,7 @@ class Login2Screen extends StatelessWidget {
                                             SignUpScreen())));
                               },
                               child: const Text(
-                                "Sign up",
+                                "Đăng ký",
                                 style: TextStyle(color: Color(0xff95ae45)),
                               ))
                         ],

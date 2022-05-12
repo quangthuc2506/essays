@@ -74,14 +74,22 @@ class DetailsTab extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.centerLeft,
+              margin: const EdgeInsets.only(left: 15),
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: const Text(
-                'Product Description',
+                'Mô tả',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
-            const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.')
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
+                children: const [
+                  Text(
+                      'Cơm đùi gà với gà tươi, thơm ngon, bổ dưỡng'),
+                ],
+              ),
+            )
           ],
         ),
       ),

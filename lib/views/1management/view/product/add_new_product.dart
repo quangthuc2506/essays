@@ -9,8 +9,8 @@ import 'package:essays/widgets/product_edit_my_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class AddNewProductScreen extends StatefulWidget {
-  Product product;
-  AddNewProductScreen({Key? key, required this.product}) : super(key: key);
+  
+  const AddNewProductScreen({Key? key}) : super(key: key);
 
   @override
   State<AddNewProductScreen> createState() => _AddNewProductScreenState();

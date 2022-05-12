@@ -87,7 +87,7 @@ class SignUpScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Sign Up",
+                            "Đăng ký",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 36,
@@ -99,7 +99,7 @@ class SignUpScreen extends StatelessWidget {
                           textFormFieldLogin(
                               controller: _fullNameController,
                               prefixIcon: Icons.person,
-                              labelText: 'Full name',
+                              labelText: 'Họ tên',
                               hintText: "Nguyễn Quang Thức"),
                           textFormFieldLogin(
                               controller: _emailController,
@@ -109,21 +109,19 @@ class SignUpScreen extends StatelessWidget {
                           textFormFieldLogin(
                               controller: _phoneNumberController,
                               prefixIcon: Icons.phone,
-                              labelText: "Phone Number",
+                              labelText: "Số điện thoại",
                               hintText: "0963255409"),
                           textFormFieldLogin(
                               controller: _passwordController,
                               prefixIcon: Icons.lock_open_outlined,
-                              labelText: "Password",
+                              labelText: "Mật khẩu",
                               suffixIcon: Icons.visibility),
                           textFormFieldLogin(
                               controller: _confirmPasswordController,
                               prefixIcon: Icons.lock_open_outlined,
-                              labelText: "Confirm password",
+                              labelText: "Xác nhận mật khẩu",
                               suffixIcon: Icons.visibility),
-                          const Align(
-                              alignment: Alignment.centerRight,
-                              child: Text("Forgot password?")),
+                          
                           const SizedBox(
                             height: 16,
                           ),
@@ -131,7 +129,7 @@ class SignUpScreen extends StatelessWidget {
                             height: 16,
                           ),
                           ButtonBlackGreen(
-                            text: "Sign Up",
+                            text: "Đăng ký",
                             onPressed: () {
                               _authenticateWithEmailAndPassword(context);
                             },
@@ -142,7 +140,7 @@ class SignUpScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text("Already have any account? "),
+                              const Text("Bạn đã có tài khoản? "),
                               GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -152,7 +150,7 @@ class SignUpScreen extends StatelessWidget {
                                                 Login2Screen()));
                                   },
                                   child: const Text(
-                                    "Sign In",
+                                    "Đăng nhập",
                                     style: TextStyle(color: Color(0xff95ae45)),
                                   ))
                             ],

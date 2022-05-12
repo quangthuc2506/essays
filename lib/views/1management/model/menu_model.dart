@@ -34,21 +34,21 @@ List<MenuModel> menuList = [
   MenuModel(
       id: 5,
       icon: Image.asset(AppAssets.nhanvienIcon),
-      content: 'Quản lý nhân viên',
+      content: 'Quản lý nhân sự',
       color: const Color(0xff13D187)),
   MenuModel(
       id: 6,
       icon: Image.asset(AppAssets.reservedIcon),
-      content: 'Quản lý đơn đặt bàn',
+      content: 'Theo dõi đơn đặt bàn',
       color: const Color(0xff299BFE)),
   MenuModel(
       id: 7,
       icon: Image.asset(AppAssets.doanhThuIcon),
-      content: 'Quản lý doanh thu',
+      content: 'Xem doanh thu',
       color: const Color(0xff13D187)),
   MenuModel(
       id: 8,
       icon: Image.asset(AppAssets.nhatKyIcon),
-      content: 'Nhật ký',
+      content: 'Xem nhật ký',
       color: const Color(0xff13D187))
 ];

@@ -209,8 +209,8 @@ class _ProductsManagementScreenState extends State<ProductsManagementScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AddNewProductScreen(
-                                                            product: product)));
+                                                        const AddNewProductScreen(
+                                                            )));
                                 },
                                 child: Card(color: Colors.white,
                                     child: DottedBorder(

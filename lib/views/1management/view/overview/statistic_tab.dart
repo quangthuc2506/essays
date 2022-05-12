@@ -49,7 +49,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           width: 2, thickness: 1, color: Colors.grey.shade400),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 5, right: 25),
+                            top: 10, bottom: 10, left: 5, right: 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -59,7 +59,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w400),
                             ),
                             Text(
-                              '0',
+                              '12.375.000',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -69,7 +69,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w400),
                             ),
                             Text(
-                              '0',
+                              '7.525.000',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             )
@@ -110,7 +110,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '0',
+                              '44',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -120,7 +120,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '0',
+                              '4.125.000',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             )
@@ -168,7 +168,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '0',
+                              '65',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -178,7 +178,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 14, fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '0',
+                              '8.250.000',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             )
@@ -224,7 +224,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              '20%',
+                              '23%',
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w600),
                             ),
