@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 class Order {
   String? address;
@@ -16,7 +15,7 @@ class Order {
     // var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(mls);// 31/12/2000, 22:00
     return Order(
         address: data['address'],
-        customerId: data['orderId'],
+        customerId: data['customerId'],
         date: getDate,
         orderId: data['orderId'],
         note: data['note'],

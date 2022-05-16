@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/views/1management/model/order.dart';
@@ -100,7 +101,7 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          const OrderDetailsInOrderTab())));
+                                           OrderDetailsInOrderTab(order: order,))));
                             },
                             child: const Text(
                               'Xem chi tiết',
@@ -119,7 +120,12 @@ class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
                           padding: const EdgeInsets.only(
                               bottom: 10, left: 10, right: 10),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('order')
+                                  .doc(order.orderId)
+                                  .update({'status': 'Đang giao hàng'});
+                            },
                             child: const Text(
                               'Lấy hàng',
                             ),

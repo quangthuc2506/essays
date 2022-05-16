@@ -100,7 +100,7 @@ class _OrderDeliveredTabState extends State<OrderDeliveredTab> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          const OrderDetailsInOrderTab())));
+                                           OrderDetailsInOrderTab(order: order,))));
                             },
                             child: const Text(
                               'Xem chi tiết',

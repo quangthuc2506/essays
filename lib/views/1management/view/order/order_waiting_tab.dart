@@ -110,7 +110,7 @@ class _OrderWaitingTabState extends State<OrderWaitingTab> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          const OrderDetailsInOrderTab())));
+                                           OrderDetailsInOrderTab(order: order,))));
                             },
                             child: const Text(
                               'Xem chi tiết',
