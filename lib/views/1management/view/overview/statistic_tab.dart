@@ -49,7 +49,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           width: 2, thickness: 1, color: Colors.grey.shade400),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 5, right: 5),
+                            top: 10, bottom: 10, left: 5, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -100,7 +100,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           width: 2, thickness: 1, color: Colors.grey.shade400),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 5, right: 25),
+                            top: 10, bottom: 10, left: 5, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -158,7 +158,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           width: 2, thickness: 1, color: Colors.grey.shade400),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 5, right: 25),
+                            top: 10, bottom: 10, left: 5, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -209,7 +209,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           width: 2, thickness: 1, color: Colors.grey.shade400),
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 5, right: 25),
+                            top: 10, bottom: 10, left: 5, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [

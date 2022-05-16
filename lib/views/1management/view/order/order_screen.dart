@@ -1,6 +1,9 @@
 import 'package:essays/values/app_assets.dart';
-import 'package:essays/views/1management/view/order/order_confirmded.dart';
-import 'package:essays/views/1management/view/order/order_waiting.dart';
+import 'package:essays/views/1management/view/order/order_cancel_tab.dart';
+import 'package:essays/views/1management/view/order/order_confirmded_tab.dart';
+import 'package:essays/views/1management/view/order/order_delivered_tab.dart';
+import 'package:essays/views/1management/view/order/order_delivery_tab.dart';
+import 'package:essays/views/1management/view/order/order_waiting_tab.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -21,7 +24,14 @@ class OrderScreen extends StatelessWidget {
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
           ),
-          leading: const Icon(Icons.arrow_back,color: Colors.white,),
+          leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              )),
           title: const Text("Danh sách đơn hàng"),
           centerTitle: true,
           elevation: 0,
@@ -66,19 +76,13 @@ class OrderScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
-          children: <Widget>[
-            OrderWaitingScreen(),
-            OrderConfirmed(),
-            Center(
-              child: Text("It's sunny here"),
-            ),
-            Center(
-              child: Text("It's sunny here"),
-            ),
-            Center(
-              child: Text("It's sunny here"),
-            ),
+        body:  const TabBarView(
+          children: [
+            OrderWaitingTab(),
+            OrderConfirmedTab(),
+            OrderDeliveryTab(),
+            OrderDeliveredTab(),
+            OrderCancelTab(),
           ],
         ),
       ),

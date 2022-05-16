@@ -1,17 +1,18 @@
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/product_repository.dart';
 import 'package:essays/views/1management/model/order.dart';
+import 'package:essays/views/1management/view/order/order_details_in_ordertab.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
 import 'package:flutter/material.dart';
 
-class OrderWaitingScreen extends StatefulWidget {
-  const OrderWaitingScreen({Key? key}) : super(key: key);
+class OrderConfirmedTab extends StatefulWidget {
+  const OrderConfirmedTab({Key? key}) : super(key: key);
 
   @override
-  State<OrderWaitingScreen> createState() => _OrderWaitingScreenState();
+  State<OrderConfirmedTab> createState() => _OrderConfirmedTabState();
 }
 
-class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
+class _OrderConfirmedTabState extends State<OrderConfirmedTab> {
   final _orderRepo = OrderRepository();
   final _productRepo = ProductRepository();
   List<Order> _listOrder = [];
@@ -19,7 +20,7 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
   @override
   void initState() {
     getAllProduct();
-    returnListOrder();
+    returnListOrderConfirmed();
     super.initState();
   }
 
@@ -41,7 +42,7 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
             child: const Text(
-              'Chờ xác nhận',
+              'Chờ lấy hàng',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -54,52 +55,37 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
             itemCount: _listOrder.length,
             itemBuilder: (context, index) {
               Order order = _listOrder[index];
-
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Divider(
-                    indent: 20,
-                    endIndent: 20,
-                    height: 2,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Đơn hàng: ${order.orderId}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              )),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                'Địa chỉ: ${order.address}',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          Text('Ghi chú: ${order.note}')
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Huỷ',
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Đơn hàng: ${order.orderId}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Text(
+                                  'Địa chỉ: ${order.address}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            Text('Ghi chú: ${order.note}')
+                          ],
                         ),
-                        style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.red,
-                            primary: Colors.white,
-                            elevation: 0,
-                            fixedSize: const Size(40, 30),
-                            side:
-                                const BorderSide(width: 1, color: Colors.red)),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -109,7 +95,13 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
                           padding: const EdgeInsets.only(
                               bottom: 10, left: 10, right: 10),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const OrderDetailsInOrderTab())));
+                            },
                             child: const Text(
                               'Xem chi tiết',
                             ),
@@ -129,7 +121,7 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
                           child: ElevatedButton(
                             onPressed: () {},
                             child: const Text(
-                              'Xác nhận',
+                              'Lấy hàng',
                             ),
                             style: ElevatedButton.styleFrom(
                                 onPrimary: const Color(0xff3AC5C8),
@@ -141,15 +133,21 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 20,
+                    height: 2,
+                  ),
+                  const SizedBox(
+                    height: 10,
                   )
                 ],
               );
             },
           ),
           Container(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            alignment: Alignment.topCenter,
-            color: Colors.grey[300],
+            alignment: Alignment.center,
             child: const Text('Bạn đã xem hết danh sách'),
           )
         ],
@@ -157,8 +155,8 @@ class _OrderWaitingScreenState extends State<OrderWaitingScreen> {
     );
   }
 
-  void returnListOrder() {
-    _orderRepo.getAllOrder().listen((pros) async {
+  void returnListOrderConfirmed() {
+    _orderRepo.getOrderConfirmed().listen((pros) async {
       _listOrder = pros;
       setState(() {});
     });

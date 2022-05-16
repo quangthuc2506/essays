@@ -21,6 +21,7 @@ class _TableScreenState extends State<TableScreen> {
           fit: BoxFit.fitWidth,
           alignment: Alignment.topCenter,
         ),
+        automaticallyImplyLeading: false,
         title: const Text("Danh sách bàn"),
         centerTitle: true,
         elevation: 0,

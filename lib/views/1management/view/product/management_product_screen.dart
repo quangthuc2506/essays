@@ -61,6 +61,7 @@ class _ProductsManagementScreenState extends State<ProductsManagementScreen> {
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.topCenter,
               ),
+              automaticallyImplyLeading: false,
               title: const Text("Danh sách sản phẩm"),
               centerTitle: true,
               elevation: 0,

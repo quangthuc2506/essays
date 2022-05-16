@@ -1,21 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:essays/models/product.dart';
 import 'package:essays/repository/product/product_repository.dart';
-import 'package:essays/views/1management/model/order_details.dart';
+import 'package:essays/views/1management/model/order.dart';
+import 'package:essays/views/1management/view/order/order_details_in_ordertab.dart';
 import 'package:essays/views/1management/viewmodel/order_repository/order_repository.dart';
-import 'package:essays/views/products/moneyFormat.dart';
 import 'package:flutter/material.dart';
 
-class OrderConfirmed extends StatefulWidget {
-  const OrderConfirmed({Key? key}) : super(key: key);
+class OrderWaitingTab extends StatefulWidget {
+  const OrderWaitingTab({Key? key}) : super(key: key);
 
   @override
-  State<OrderConfirmed> createState() => _OrderConfirmedState();
+  State<OrderWaitingTab> createState() => _OrderWaitingTabState();
 }
 
-class _OrderConfirmedState extends State<OrderConfirmed> {
+class _OrderWaitingTabState extends State<OrderWaitingTab> {
   final _orderRepo = OrderRepository();
   final _productRepo = ProductRepository();
-  List<OrderDetails> _listOrderDetails = [];
+  List<Order> _listOrder = [];
   List<Product> _listProduct = [];
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
   @override
   Widget build(BuildContext context) {
     GlobalKey _key = GlobalKey();
-    print('length1: ${_listOrderDetails.length}');
+    print('length1: ${_listOrder.length}');
     return SingleChildScrollView(
       key: _key,
       physics: const ScrollPhysics(),
@@ -52,32 +53,18 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
           ListView.builder(
             physics: const ScrollPhysics(),
             shrinkWrap: true,
-            itemCount: _listOrderDetails.length,
+            itemCount: _listOrder.length,
             itemBuilder: (context, index) {
-              OrderDetails order = _listOrderDetails[index];
-
+              Order order = _listOrder[index];
               return Column(
                 children: [
-                  const Divider(
-                    indent: 20,
-                    endIndent: 20,
-                    height: 1,
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        width: 75,
-                        height: 75,
-                        child: Image(
-                            image: NetworkImage(
-                                getProductImage(order.productId!))),
-                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(getProductName(order.productId!),
+                          Text('Đơn hàng: ${order.orderId}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -85,31 +72,29 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                           const SizedBox(
                             height: 5,
                           ),
-                          IntrinsicHeight(
-                            child: Row(
-                              children: [
-                                Text(order.amount.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey)),
-                                const VerticalDivider(
-                                  thickness: 2,
-                                  indent: 2,
-                                  endIndent: 2,
-                                ),
-                                Text(
-                                    '${moneyFormat((order.amount! * order.price!)
-                                        .toString())!} đ',
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey))
-                              ],
-                            ),
-                          )
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Text(
+                                'Địa chỉ: ${order.address}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          Text('Ghi chú: ${order.note}')
                         ],
-                      )
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Huỷ',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            onPrimary: Colors.red,
+                            primary: Colors.white,
+                            elevation: 0,
+                            fixedSize: const Size(40, 30),
+                            side:
+                                const BorderSide(width: 1, color: Colors.red)),
+                      ),
                     ],
                   ),
                   Row(
@@ -120,7 +105,13 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                           padding: const EdgeInsets.only(
                               bottom: 10, left: 10, right: 10),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const OrderDetailsInOrderTab())));
+                            },
                             child: const Text(
                               'Xem chi tiết',
                             ),
@@ -138,7 +129,9 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                           padding: const EdgeInsets.only(
                               bottom: 10, left: 10, right: 10),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await FirebaseFirestore.instance.collection('order').doc(order.orderId).update({'status':'Chờ lấy hàng'});
+                            },
                             child: const Text(
                               'Xác nhận',
                             ),
@@ -150,18 +143,23 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                                     width: 1, color: Color(0xff3AC5C8))),
                           ),
                         ),
-                      )
+                      ),
                     ],
+                  ),
+                  const Divider(
+                    indent: 20,
+                    endIndent: 20,
+                    height: 2,
+                  ),
+                  const SizedBox(
+                    height: 10,
                   )
                 ],
               );
             },
           ),
           Container(
-            
-            padding: const EdgeInsets.only(top: 20),
-            alignment: Alignment.topCenter,
-            color: Colors.grey[300],
+            alignment: Alignment.center,
             child: const Text('Bạn đã xem hết danh sách'),
           )
         ],
@@ -170,8 +168,8 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
   }
 
   void returnListOrder() {
-    _orderRepo.getAllOrdersDetails().listen((pros) async {
-      _listOrderDetails = pros;
+    _orderRepo.getAllOrder().listen((pros) async {
+      _listOrder = pros;
       setState(() {});
     });
   }

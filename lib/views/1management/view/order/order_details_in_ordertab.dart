@@ -1,8 +1,8 @@
 import 'package:essays/values/app_assets.dart';
 import 'package:flutter/material.dart';
 
-class OrderDetails extends StatelessWidget {
-  const OrderDetails({Key? key}) : super(key: key);
+class OrderDetailsInOrderTab extends StatelessWidget {
+  const OrderDetailsInOrderTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,11 @@ class OrderDetails extends StatelessWidget {
         title: const Text("Đơn hàng"),
         centerTitle: true,
         elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Colors.white),
+        leading: InkWell(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white)),
       ),
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),

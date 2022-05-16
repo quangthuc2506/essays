@@ -18,6 +18,7 @@ class OverviewScreen extends StatelessWidget {
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
           ),
+          automaticallyImplyLeading: false,
           title: const Text("Hoạt động"),
           leading: const Icon(
             Icons.poll_sharp,
